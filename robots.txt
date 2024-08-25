@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://shreyansh26.github.iojekyll-website/sitemap.xml
+Sitemap: https://shreyansh26.github.ioPersonal-Website-New/sitemap.xml
