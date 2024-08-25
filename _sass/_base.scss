@@ -870,6 +870,10 @@ html.transition *:after {
 
 // Extra Markdown style (post Customization)
 .post {
+  .post-content {
+    font-size: 1.2rem;
+  }
+
   .post-meta {
     color: var(--global-text-color-light);
     font-size: 0.875rem;

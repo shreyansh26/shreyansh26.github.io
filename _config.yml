@@ -18,7 +18,7 @@ lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
 icon: ⚛️ # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
 
 url: https://alshedivat.github.io # the base hostname & protocol for your site
-baseurl: /al-folio # the subpath of your site, e.g. /blog/. Leave blank for root
+baseurl:  # the subpath of your site, e.g. /blog/. Leave blank for root
 last_updated: false # set to true if you want to display last updated in the footer
 impressum_path: # set to path to include impressum link in the footer, use the same path as permalink in a page, helps to conform with EU GDPR
 back_to_top: true # set to false to disable the back to top button
@@ -54,7 +54,7 @@ socials_in_search: true
 bib_search: true
 
 # Dimensions
-max_width: 930px
+max_width: 1200px
 
 # TODO: add layout settings (single page vs. multi-page)
 
@@ -135,7 +135,7 @@ bing_site_verification: # out your bing-site-verification ID (Bing Webmaster)
 
 blog_name: al-folio # blog_name will be displayed in your blog page
 blog_description: a simple whitespace theme for academics
-permalink: /blog/:year/:title/
+permalink: /post/:slug/
 lsi: false # produce an index for related posts
 
 # Pagination
@@ -168,13 +168,14 @@ disqus_shortname: al-folio # put your disqus shortname
 # External sources.
 # If you have blog posts published on medium.com or other external sources,
 # you can display them in your blog by adding a link to the RSS feed.
-external_sources:
-  - name: medium.com
-    rss_url: https://medium.com/@al-folio/feed
-  - name: Google Blog
-    posts:
-      - url: https://blog.google/technology/ai/google-gemini-update-flash-ai-assistant-io-2024/
-        published_date: 2024-05-14
+# external_sources:
+#   # - name: medium.com
+#   #   rss_url: https://medium.com/@al-folio/feed
+#   - name: Old Blog
+#     rss_url: https://shreyansh26.github.io/index.xml
+#     # posts:
+#     #   - url: https://blog.google/technology/ai/google-gemini-update-flash-ai-assistant-io-2024/
+#     #     published_date: 2024-05-14
 
 # -----------------------------------------------------------------------------
 # Newsletter
@@ -490,6 +491,9 @@ third_party_libraries:
   google_fonts:
     url:
       fonts: "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&display=swap"
+  spectral_font:
+    url:
+      fonts: "https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
   highlightjs:
     integrity:
       css:
