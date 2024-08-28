@@ -17,6 +17,7 @@ li,
 span,
 strong {
   color: var(--global-text-color);
+  font-family: "Spectral";
 }
 
 hr {
@@ -857,6 +858,11 @@ code {
   background-color: var(--global-code-bg-color);
   border-radius: 3px;
   padding: 3px 3px;
+  font-family: "Source Code Pro", monospace;
+}
+
+code span, code p {
+  font-family: inherit; /* Inherit the font from the code tag */
 }
 
 // Transitioning Themes
