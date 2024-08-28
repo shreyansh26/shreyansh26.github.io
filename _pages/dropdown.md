@@ -1,16 +1,20 @@
 ---
 layout: page
-title: submenus
-nav: true
+title: More
+nav: false
 nav_order: 8
 dropdown: true
 children:
-  - title: publications
+  - title: Resume
+    newtab: true
+    permalink: /assets/pdf/resume/Resume_Shreyansh.pdf
+  - title: divider
+  - title: Publications
     permalink: /publications/
-  - title: divider
-  - title: projects
-    permalink: /projects/
-  - title: divider
-  - title: blog
-    permalink: /blog/
+  # - title: divider
+  # - title: projects
+  #   permalink: /projects/
+  # - title: divider
+  # - title: blog
+  #   permalink: /blog/
 ---
