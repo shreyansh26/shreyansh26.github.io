@@ -1,14 +1,13 @@
 github_users:
-  - torvalds
-  - alshedivat
+  - shreyansh26
 
 repo_description_lines_max: 2
 
 github_repos:
-  - alshedivat/al-folio
-  - jekyll/jekyll
-  - twbs/bootstrap
-  - jquery/jquery
-  - FortAwesome/Font-Awesome
-  - mathjax/MathJax
-  - jpswalsh/academicons
+  - shreyansh26/Annotated-ML-Papers
+  - shreyansh26/MLSys-Experiments
+  - shreyansh26/FlashAttention-PyTorch
+  - shreyansh26/Extracting-Training-Data-from-Large-Langauge-Models
+  - shreyansh26/Speculative-Sampling
+  - shreyansh26/DeepLearning-in-the-Browser 
+  - shreyansh26/Linux-Malware-Detection-Research
