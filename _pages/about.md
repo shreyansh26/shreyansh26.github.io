@@ -1,25 +1,26 @@
 ---
 layout: about
-title: about
+title: About
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Moto. Etc.
+subtitle:
 
 profile:
   align: right
-  image: prof_pic.jpg
+  image: profile_pictures/shreyansh_dharamshala.jpg
   image_circular: false # crops the image to make it circular
-  more_info: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Your City, State 12345</p>
+  # more_info: >
+  #   <p>555 your office number</p>
+  #   <p>123 your address street</p>
+  #   <p>Your City, State 12345</p>
 
 news: true # includes a list of news items
-selected_papers: true # includes a list of papers marked as "selected={true}"
+selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
+
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+I am currently working as a **Lead Machine Learning Engineer at [LevelAI](https://thelevel.ai/)**. My team is is spread across India, USA & Canada and we primarily work on solving challenging NLP problems at scale to extract and deliver insights from contact-center conversations. Previously, I was working at [Mastercard's AI Garage](https://www.linkedin.com/company/mastercard-ai-garage/) as a Data Scientist where we were leveraging AI to make the transactions world a smarter and secure place. In my corporate experience, I have mainly worked on **applied research**, meaning I have been involved both in incorporating AI and Machine Learning in product development <u>(leading to product launches/patents)</u> as well as pure research work <u>(publishing papers at AI conferences)</u>.
 
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+I did my **B.Tech in Computer Science and Engineering from IIT (BHU) Varanasi**. My B.Tech thesis advisor was [**Prof. K.K. Shukla**](https://iitbhu.ac.in/dept/cse/people/kkshuklacse). I worked on privacy-preserving Machine Learning and its application in the medical industry. Previously I had also worked with him on Adversarial Machine Learning and Malware classification problems. In summer 2019, I was an intern at [**Samsung Research Institute - Bangalore**](https://research.samsung.com/sri-b), working on mobility in 5G networks. I also worked as a research intern at the [**C3i Institute, Indian Institute of Technology Kanpur**](https://security.cse.iitk.ac.in/) on Malware Detection for Linux, in winter 2018.  In summer 2018, I was a Data Science intern at [**Innoplexus, Pune (India)**](https://www.innoplexus.com/), working with the Computer Vision team. I have also worked with [**Dr. Anil Kumar Singh**](https://www.iitbhu.ac.in/dept/cse/people/aksinghcse), on sentiment analysis on product reviews and natural language generation through shared tasks at conferences.
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](https://fontawesome.com/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+When not working on research, I enjoy playing CTFs ([wr47h](https://ctftime.org/team/34870)), either solo or with my team [**Abs0lut3Pwn4g3**](https://ctftime.org/team/72103). I also enjoy competitive programming and reading novels.
