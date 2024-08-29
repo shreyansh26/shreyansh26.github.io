@@ -4,6 +4,32 @@
 
 // Typography
 
+@font-face {
+  font-family: 'Palatino Linotype';
+  src: url('../fonts/Palatino Linotype.ttf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Palatino Linotype';
+  src: url('../fonts/Palatino Linotype Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Palatino Linotype';
+  src: url('../fonts/Palatino Linotype Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Palatino Linotype';
+  src: url('../fonts/Palatino Linotype Bold Italic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
 p,
 h1,
 h2,
@@ -14,11 +40,15 @@ h6,
 em,
 div,
 li,
-span,
+span {
+  color: var(--global-text-color);
+  font-family: "Palatino Linotype";
+}
+
 strong {
   color: var(--global-text-color);
   font-family: "Palatino Linotype";
-  src: url("../assets/fonts/Palatino Linotype.tff");
+  font-weight: bold;
 }
 
 hr {
@@ -385,7 +415,7 @@ ul.task-list input[type="checkbox"] {
   text-align: center;
 
   .contact-icons {
-    font-size: 4rem;
+    font-size: 3rem;
 
     a {
       i::before {
