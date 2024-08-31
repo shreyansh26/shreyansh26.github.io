@@ -20,7 +20,7 @@ toc:
 **Authors**: Tri Dao, Daniel Y. Fu, Stefano Ermon, Atri Rudra, Christopher Ré  
 **Code**: [https://github.com/HazyResearch/flash-attention](https://github.com/HazyResearch/flash-attention)
 
-**I have also released an annotated version of the paper. If you are interested, you can find it [here](https://github.com/shreyansh26/Annotated-ML-Papers/blob/main/MLSys/FlashAttention%20-%20Fast%20and%20Memory-Efficient%20Exact%20Attention.pdf).**
+**I have also released an annotated version of the paper. You can find it [here](https://github.com/shreyansh26/Annotated-ML-Papers/blob/main/MLSys/FlashAttention%20-%20Fast%20and%20Memory-Efficient%20Exact%20Attention.pdf).**
 
 ---
 

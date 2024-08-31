@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Paper Summary #11 - Sora"
-date: 2024-02-18
+date: 2024-02-18 07:00:00
 description: "OpenAI announced a ground-breaking text-to-video diffusion model capable of generating high-definition videos up to 60 seconds long."
-tags: diffusion image-generation video-generation
-categories: Diffusion
+tags: diffusion image-generation video-generation generative-ai
+categories: ["Computer Vision"]
 disqus_comments: true
 related_posts: false
 permalink: "post/2024-02-18_sora_openai/"
@@ -60,8 +60,6 @@ More details about the image captioner in the next blog post.
 * Simulating digital worlds - Sora can generate Minecraft videos, wherein it can simultaneously control the player with a basic policy while also rendering the world and its dynamics in high fidelity.
 
 ---
-
-A great paper overall, tremendous impact and personally, I had loads to learn from it!
 
 &nbsp;
 
