@@ -7,7 +7,7 @@ tags: mlsys transformers efficiency attention paper-summaries
 categories: MLSys
 disqus_comments: true
 related_posts: false
-slug: "2023-03-26_flash-attention"
+permalink: "post/2023-03-26_flash-attention"
 featured: true
 toc:
   sidebar: left
