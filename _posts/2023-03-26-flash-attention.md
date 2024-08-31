@@ -13,6 +13,8 @@ toc:
   sidebar: left
 ---
 
+{% include image.liquid url="/assets/img/posts_images/flash_attention/featured.png" description="" %}
+
 **Paper**: FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness  
 **Link**: [https://arxiv.org/abs/2205.14135](https://arxiv.org/abs/2205.14135)  
 **Authors**: Tri Dao, Daniel Y. Fu, Stefano Ermon, Atri Rudra, Christopher Ré  
