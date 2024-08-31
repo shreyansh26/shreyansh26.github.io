@@ -892,7 +892,19 @@ code {
   font-family: "Source Code Pro", monospace;
 }
 
+.gist-data {
+  color: var(--global-theme-color);
+  background-color: var(--global-code-bg-color);
+  border-radius: 3px;
+  padding: 3px 3px;
+  font-family: "Source Code Pro", monospace;
+}
+
 code span, code p {
+  font-family: inherit; /* Inherit the font from the code tag */
+}
+
+.gist-data span, .gist-data p {
   font-family: inherit; /* Inherit the font from the code tag */
 }
 
