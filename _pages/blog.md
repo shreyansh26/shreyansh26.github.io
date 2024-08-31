@@ -71,7 +71,7 @@ pagination:
 <div class="col-md-12">
 <div class="card-body">
 <div class="float-right">
-<i class="fa-solid fa-thumbtack fa-xs"></i>
+<!-- <i class="fa-solid fa-thumbtack fa-xs"></i> -->
 </div>
 <h3 class="card-title">{{ post.title }}</h3>
 <p class="card-text">{{ post.description }}</p>
