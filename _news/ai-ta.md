@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Started to work as a TA for the Artificial Intelligence course offered to sophomores of the CSE Department of IIT(BHU) Varanasi.
+Started to work as a TA for the Artificial Intelligence course offered to sophomores of the CSE Department of IIT (BHU) Varanasi.

@@ -22,7 +22,7 @@ toc:
 
 **I have also released an annotated version of the paper. If you are interested, you can find it [here](https://github.com/shreyansh26/Annotated-ML-Papers/blob/main/General-DL/FlashAttention%20-%20Fast%20and%20Memory-Efficient%20Exact%20Attention.pdf).**
 
---------------------
+---
 
 **\[Update\] - I implemented a simplified version of FlashAttention (without the CUDA and SRAM memory optimizations) in PyTorch. [Check it out on Github.](https://github.com/shreyansh26/FlashAttention-PyTorch)**
 
@@ -30,7 +30,7 @@ I finished reading the FlashAttention paper recently and thought that it would b
 
 ## Overview
 
-Attention as we know, in its standard implementation is an $$O(N^2)$$ operation, where N is the sequence length. There are many approximate attention methods out there like Reformer, SMYRF, Performer and others ([you can find more details on a few of these in my previous blog](https://shreyansh26.github.io/post/2022-10-10_efficient_transformers_survey/)) which aim to reduce the compute requirements to linear or near-linear in sequence length, but many of them do not display wall-clock speedup against standard attention. They focus on FLOP reduction (which doesn't always correlate with wall-clock speed) and tend to ignore overheads from memory access (IO).FlashAttention aims to incorporate IO-awareness i.e. dividing operations between faster and slower levels of GPU memory to make the whole computation faster. The algorithm uses tiling to reduce the number of memory reads/writes between GPU high bandwidth memory (HBM) and GPU on-chip SRAM. FlashAttention can also be extended to block-spare attention and this results in the fastest approximate (or not) attention algorithm out there. 
+Attention as we know, in its standard implementation is an $$O(N^2)$$ operation, where N is the sequence length. There are many approximate attention methods out there like Reformer, SMYRF, Performer and others ([you can find more details on a few of these in my previous blog](https://shreyansh26.github.io/post/2022-10-10_efficient_transformers_survey/)) which aim to reduce the compute requirements to linear or near-linear in sequence length, but many of them do not display wall-clock speedup against standard attention. They focus on FLOP reduction (which doesn't always correlate with wall-clock speed) and tend to ignore overheads from memory access (IO). FlashAttention aims to incorporate IO-awareness i.e. dividing operations between faster and slower levels of GPU memory to make the whole computation faster. The algorithm uses tiling to reduce the number of memory reads/writes between GPU high bandwidth memory (HBM) and GPU on-chip SRAM. FlashAttention can also be extended to block-spare attention and this results in the fastest approximate (or not) attention algorithm out there.
 
 All this helps to improve the training time of Transformer models - a 15% end-to-end wall-clock speedup on BERT-large (seq. length 512) compared to the MLPerf 1.1 training speed record, 3× speedup on GPT-2 (seq. length 1K). This memory-efficient approach also helps to incorporate a longer context (up to 16k/64k tokens) which also results in better models (0.7 better perplexity on GPT-2).
 
@@ -38,7 +38,7 @@ I'll describe more details in the future sections.
 
 ## Background - Hardware Performance
 
-Since FlashAttention computes exact attention, and the major crux of their work is the efficient hardware usage, it is important to know a bit about GPU memory and the performance characteristics of various kinds of operations on it. 
+Since FlashAttention computes exact attention, and the major crux of their work is the efficient hardware usage, it is important to know a bit about GPU memory and the performance characteristics of various kinds of operations on it.
 
 {% include image.liquid url="/assets/img/posts_images/flash_attention/gpu_mem.png" description="A100 GPU Memory Hierarchy. Source - <a href='https://arxiv.org/abs/2205.14135'>https://arxiv.org/abs/2205.14135</a>" %}
 
@@ -48,11 +48,11 @@ For a A100 GPU with 40GB of High Memory Bandwidth (HBM), a rough diagram of the 
 
 ### Execution Model
 
-The typical way in which GPUs operate are that they use a large number of threads to perform an operation, which is called a kernel. The input is loaded from the HBM to the registers and SRAM, and written back to the HBM after computation. 
+The typical way in which GPUs operate are that they use a large number of threads to perform an operation, which is called a kernel. The input is loaded from the HBM to the registers and SRAM, and written back to the HBM after computation.
 
 ### Performance Characteristics
 
-There is a term called **arithmetic intensity** which is given by the number of arithmetic operations per byte of memory access. It helps to understand the bottleneck of an operation. An operation can be characterized as compute-bound (also called math-bound) or memory-bound. 
+There is a term called **arithmetic intensity** which is given by the number of arithmetic operations per byte of memory access. It helps to understand the bottleneck of an operation. An operation can be characterized as compute-bound (also called math-bound) or memory-bound.
 
 * **Compute-bound** - When the bottleneck is the compute i.e., the time taken by the operation is determined by how many arithmetic operations there are since the time taken due to HBM accesses is relative lower. E.g. of such operations are matrix multiplication with large inner dimension, and convolution with large number of channels.
 
@@ -116,9 +116,9 @@ As one may understand, the materialization of the $$N \times N$$ attention matri
 1. Computing the softmax reduction without access to the whole input
 2. Not storing the large intermediate attention matrix for the backward pass
 
-Two established techniques, namely **tiling** and **recomputation** are used to solve this. 
+Two established techniques, namely **tiling** and **recomputation** are used to solve this.
 
-1. Tiling - The attention computation is restructured to split the input into blocks and performing the softmax operation incrementally by making several passes over the input blocks. 
+1. Tiling - The attention computation is restructured to split the input into blocks and performing the softmax operation incrementally by making several passes over the input blocks.
 2. Recomputation - The softmax normalization factor from the forward pass is stored to quickly recompute attention on-chip in the backward pass, which is faster than the standard attention approach of reading the intermediate matrix from HBM.
 
 This does lead to increased FLOPs due to recomputation, however FlashAttention runs both faster (up to 7.6x on GPT-2) and uses less memory — linear in sequence length, due to the massively reduced amount of HBM access.
@@ -165,7 +165,7 @@ The proof for the FLOPs calculation is given in Appendix C of the paper, which s
 
 **Important Information** - *Let $$N$$ be the sequence length, $$d$$ be the head dimension, and $$M$$ be the size of SRAM with $$d \leq M \leq Nd$$. Standard attention requires $$\Theta(Nd + N^2)$$ HBM accesses while FlashAttention requires $$\Theta(N^2d^2M^{-1})$$ HBM accesses.*
 
-For typical values of $$d$$ (64-128) and $$M$$ (around 100KB), $$d^2$$ is many times smaller than $$M$$, and thus FlashAttention requires many times fewer HBM accesses than standard implementation. This leads to both faster execution and a lower memory footprint. 
+For typical values of $$d$$ (64-128) and $$M$$ (around 100KB), $$d^2$$ is many times smaller than $$M$$, and thus FlashAttention requires many times fewer HBM accesses than standard implementation. This leads to both faster execution and a lower memory footprint.
 
 The authors also go on to show that the number of HBM accesses by FlashAttention is a lower-bound. There can be no implementation which can asymptotically improve on the number of HBM accesses for all values of $$M$$ when doing exact attention calculation.
 
@@ -238,7 +238,7 @@ These are challenging tasks from the long range arena benchmark where the task i
 FlashAttention beats all exact attention baselines and is about 3× faster than the PyTorch implementation. The runtimes of many approximate/sparse attention mechanisms grow linearly with sequence length, but FlashAttention still runs faster than approximate and sparse attention for short sequences due to fewer memory accesses. The approximate attention runtimes begin to cross over with FlashAttention at sequences between 512 and 1024. On the other hand, block-sparse FlashAttention is faster than all implementations of exact, sparse, and approximate attention that are available, across all sequence lengths.
 
 #### Memory Footprint
-FlashAttention and block-sparse FlashAttention have the same memory footprint, which grows linearly with sequence length. FlashAttention is up to 20× more memory efficient than exact attention baselines, and is more memory-efficient than the approximate attention baselines.  All other algorithms except for Linformer run out of memory on an A100 GPU before 64K, and FlashAttention is still 2× more efficient than Linformer. 
+FlashAttention and block-sparse FlashAttention have the same memory footprint, which grows linearly with sequence length. FlashAttention is up to 20× more memory efficient than exact attention baselines, and is more memory-efficient than the approximate attention baselines.  All other algorithms except for Linformer run out of memory on an A100 GPU before 64K, and FlashAttention is still 2× more efficient than Linformer.
 
 -------
 
