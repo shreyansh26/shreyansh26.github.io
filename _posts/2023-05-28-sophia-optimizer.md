@@ -2,6 +2,7 @@
 layout: post
 title: "Paper Summary #9 - Sophia: A Scalable Stochastic Second-order Optimizer for Language Model Pre-training"
 date: 2023-05-28
+author: "Shreyansh Singh"
 description: Understanding Sophia - A new fast, scalable second-order optimizer which beats Adam on LLM pretraining.
 tags: transformers optimizer deep-learning paper-summaries
 categories: ["Deep Learning", "ML Theory"]

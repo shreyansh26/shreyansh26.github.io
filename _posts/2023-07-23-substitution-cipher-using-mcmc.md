@@ -2,6 +2,7 @@
 layout: post
 title: "Solving Substitution Ciphers using Markov Chain Monte Carlo (MCMC)"
 date: 2023-07-23 06:00:00
+author: "Shreyansh Singh"
 description: "Deciphering substitution ciphers can be framed as a Markov chain problem and a simple Monte Carlo sampling approach can help solve them very efficiently"
 tags: sampling probability mcmc
 categories: ["Mathematics", "Cryptography"]
