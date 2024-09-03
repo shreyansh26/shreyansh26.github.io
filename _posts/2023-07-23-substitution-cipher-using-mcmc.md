@@ -7,7 +7,7 @@ description: "Deciphering substitution ciphers can be framed as a Markov chain p
 tags: sampling probability mcmc
 categories: ["Mathematics", "Cryptography"]
 pseudocode: true
-disqus_comments: true
+disqus_comments: false
 related_posts: false
 permalink: "post/2023-07-22_solving_substitution_cipher_using_mcmc/"
 featured: false

@@ -6,7 +6,7 @@ author: "Shreyansh Singh"
 description: A survey paper of improvements over the original Transformer architecture in terms of memory-efficiency.
 tags: mlsys transformers efficiency attention paper-summaries
 categories: ["MLSys", "LLMs"]
-disqus_comments: true
+disqus_comments: false
 related_posts: false
 permalink: "post/2022-10-10_efficient_transformers_survey/"
 featured: false

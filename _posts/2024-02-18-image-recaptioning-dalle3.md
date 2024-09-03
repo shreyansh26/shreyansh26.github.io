@@ -6,7 +6,7 @@ author: "Shreyansh Singh"
 description: "The image recaptioning technique used in DALL-E 3 was extended to videos in Sora."
 tags: image-captioning generative-ai
 categories: ["Computer Vision"]
-disqus_comments: true
+disqus_comments: false
 related_posts: false
 permalink: "post/2024-02-18_dalle3_image_recaptioner/"
 featured: false

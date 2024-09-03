@@ -6,7 +6,7 @@ author: "Shreyansh Singh"
 description: A mathematical deep dive on a Federated Optimization algorithm - FedAvg and comparing it with a standard approach - FedSGD.
 tags: ["federated learning", "ppml", "paper-summaries"]
 categories: ["PPML"]
-disqus_comments: true
+disqus_comments: false
 related_posts: false
 permalink: "post/2021-12-18_federated_optimization_fedavg/"
 featured: false
