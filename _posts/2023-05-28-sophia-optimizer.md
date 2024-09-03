@@ -6,7 +6,7 @@ author: "Shreyansh Singh"
 description: Understanding Sophia - A new fast, scalable second-order optimizer which beats Adam on LLM pretraining.
 tags: transformers optimizer deep-learning paper-summaries
 categories: ["Deep Learning", "ML Theory"]
-disqus_comments: false
+giscus_comments: true
 related_posts: false
 permalink: "post/2023-05-28_sophia_scalable_second_order_optimizer_llms/"
 featured: true

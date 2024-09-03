@@ -6,7 +6,7 @@ author: "Shreyansh Singh"
 description: Understanding FlashAttention which is the most efficient exact attention implementation out there, which optimizes for both memory requirements and wall-clock time.
 tags: mlsys transformers efficiency attention paper-summaries
 categories: MLSys
-disqus_comments: false
+giscus_comments: true
 related_posts: false
 permalink: "post/2023-03-26_flash-attention/"
 featured: true

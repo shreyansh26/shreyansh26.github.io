@@ -6,7 +6,7 @@ author: "Shreyansh Singh"
 description: Understanding how your mobile keyboard (Gboard, specifically) performs the next word prediction task and performs model training and updates
 tags: ["federated learning", "ppml", "paper-summaries"]
 categories: ["PPML"]
-disqus_comments: false
+giscus_comments: true
 related_posts: false
 permalink: "post/2021-12-27_federated_learning_mobile_keyboard/"
 featured: false

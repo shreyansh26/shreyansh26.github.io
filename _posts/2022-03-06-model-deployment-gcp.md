@@ -6,7 +6,7 @@ author: "Shreyansh Singh"
 description: A step-wise tutorial to demonstrate the steps required to deploy a ML model using GCP, specifically the Google AI Platform and use Streamlit to access the model through a UI.
 tags: model-deployment gcp streamlit
 categories: ["MLOps"]
-disqus_comments: false
+giscus_comments: true
 related_posts: false
 permalink: "post/2022-03-06_model_deployment_using_gcp_google_ai_platform/"
 featured: false

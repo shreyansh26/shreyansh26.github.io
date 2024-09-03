@@ -6,7 +6,7 @@ author: "Shreyansh Singh"
 description: A step-wise tutorial to demonstrate the steps required to deploy a ML model using AWS Lambda, Github Actions, API Gateway and use Streamlit to access the model API through a UI.
 tags: model-deployment aws streamlit github-actions
 categories: ["MLOps"]
-disqus_comments: false
+giscus_comments: true
 related_posts: false
 permalink: "post/2022-01-23_model_deployment_using_aws_lambda/"
 featured: false

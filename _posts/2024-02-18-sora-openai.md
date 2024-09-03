@@ -6,7 +6,7 @@ author: "Shreyansh Singh"
 description: "OpenAI announced a ground-breaking text-to-video diffusion model capable of generating high-definition videos up to 60 seconds long."
 tags: diffusion image-generation video-generation generative-ai
 categories: ["Computer Vision"]
-disqus_comments: false
+giscus_comments: true
 related_posts: false
 permalink: "post/2024-02-18_sora_openai/"
 featured: false
