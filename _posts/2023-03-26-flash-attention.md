@@ -21,9 +21,10 @@ toc:
 **Authors**: Tri Dao, Daniel Y. Fu, Stefano Ermon, Atri Rudra, Christopher Ré  
 **Code**: [https://github.com/HazyResearch/flash-attention](https://github.com/HazyResearch/flash-attention)
 
+---
+
 **I have also released an annotated version of the paper. You can find it [here](https://github.com/shreyansh26/Annotated-ML-Papers/blob/main/MLSys/FlashAttention%20-%20Fast%20and%20Memory-Efficient%20Exact%20Attention.pdf).**
 
----
 
 **\[Update\] - I implemented a simplified version of FlashAttention (without the CUDA and SRAM memory optimizations) in PyTorch. [Check it out on Github.](https://github.com/shreyansh26/FlashAttention-PyTorch)**
 

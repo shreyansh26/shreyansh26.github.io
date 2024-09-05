@@ -4,7 +4,7 @@ title: "Paper Summary #6 - Language Models are Unsupervised Multitask Learners"
 date: 2021-05-23  
 author: "Shreyansh Singh"
 description: The GPT2 model which aimed to perform complex NLP tasks while relying only on a language model trained in a completely unsupervised fashion.
-tags: ["llm", "paper-summaries"]
+tags: ["llm", "transformer", "paper-summaries"]
 categories: ["LLMs"]
 giscus_comments: true
 related_posts: false

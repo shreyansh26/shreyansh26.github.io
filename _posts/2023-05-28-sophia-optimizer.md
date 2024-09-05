@@ -21,9 +21,10 @@ toc:
 **Authors**: Hong Liu, Zhiyuan Li, David Hall, Percy Liang, Tengyu Ma  
 **Code**: [https://github.com/Liuhong99/Sophia](https://github.com/Liuhong99/Sophia)
 
+--------------------
+
 **I have also released an annotated version of the paper. You can find it [here](https://github.com/shreyansh26/Annotated-ML-Papers/blob/main/ML%20Theory/Sophia%20-%20A%20Scalable%20Stochastic%20Second-order%20Optimizer%20for%20Language%20Model%20Pretraining.pdf).**
 
---------------------
 
 Sophia is probably one of the most interesting papers I have read recently and I really liked how well it was written. This post is basically the notes that I had made while reading the paper, which is why it is not exactly a blog post and most of it is verbatim copied from the paper. But since there are a lot of optimization-theory related concepts which have been mentioned in the paper, I have tried to add my own set of references which I have read in the past that helped me understand the paper better. Hopefully it helps someone!
 
