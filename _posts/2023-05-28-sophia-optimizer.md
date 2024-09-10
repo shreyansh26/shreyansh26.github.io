@@ -9,7 +9,7 @@ categories: ["Deep Learning", "ML Theory"]
 giscus_comments: true
 related_posts: false
 permalink: "post/2023-05-28_sophia_scalable_second_order_optimizer_llms/"
-featured: true
+featured: false
 toc:
   sidebar: left
 ---

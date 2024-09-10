@@ -9,7 +9,7 @@ categories: MLSys
 giscus_comments: true
 related_posts: false
 permalink: "post/2023-03-26_flash-attention/"
-featured: true
+featured: false
 toc:
   sidebar: left
 ---
