@@ -133,7 +133,7 @@ bing_site_verification: # out your bing-site-verification ID (Bing Webmaster)
 # Blog
 # -----------------------------------------------------------------------------
 
-blog_name: Technical Blog # blog_name will be displayed in your blog page
+blog_name: # blog_name will be displayed in your blog page
 blog_description:
 permalink: /post/:slug/
 lsi: false # produce an index for related posts
