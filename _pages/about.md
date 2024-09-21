@@ -19,7 +19,7 @@ social: true # includes social icons at the bottom of the page
 
 ---
 
-I am the **Lead Machine Learning Engineer at [Level AI](https://thelevel.ai/)**, where I lead a distributed team across India and the USA. We tackle complex NLP challenges at scale, specifically focusing on building and scaling large language models (LLMs) to extract valuable insights from contact-center conversations. My work also involves optimizing LLM training and inference, delving into kernel development, and pushing the boundaries of ML systems engineering.
+I am a **Lead Machine Learning Engineer at [Level AI](https://thelevel.ai/)**, where I lead a distributed team across India and the USA. We tackle complex NLP challenges at scale, specifically focusing on building and scaling large language models (LLMs) to extract valuable insights from contact-center conversations. My work also involves optimizing LLM training and inference, delving into kernel development, and pushing the boundaries of ML systems engineering.
 
 Before Level AI, I worked as a **Data Scientist at [Mastercard's AI Garage](https://www.linkedin.com/company/mastercard-ai-garage/)**, where I developed AI models to enhance transaction security and intelligence. My career has been primarily focused on **applied research**, bridging the gap between innovation and real-world applications. This includes launching AI-driven products and contributing to research published in AI conferences.
 
