@@ -306,8 +306,8 @@ jekyll-archives:
     tag: "/blog/tag/:name/"
     category: "/blog/category/:name/"
 
-display_tags: ["mlsys"] # these tags will be displayed on the front page of your blog
-display_categories: ["MLSys"] # these categories will be displayed on the front page of your blog
+display_tags: ["mlsys", "transformer", "paper-summaries"] # these tags will be displayed on the front page of your blog
+display_categories: ["MLSys", "LLMs", "PPML"] # these categories will be displayed on the front page of your blog
 
 # -----------------------------------------------------------------------------
 # Jekyll Scholar
