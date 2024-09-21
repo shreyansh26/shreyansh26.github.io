@@ -2,13 +2,13 @@
 layout: page
 title: Projects
 permalink: /projects/
-description: A growing collection of your cool projects.
-nav: false
+description:
+nav: true
 nav_order: 3
-display_categories: [work, fun]
 horizontal: false
 ---
 
+{% comment %}
 <!-- pages/projects.md -->
 <div class="projects">
 {% if site.enable_project_categories and page.display_categories %}
@@ -63,3 +63,13 @@ horizontal: false
   {% endif %}
 {% endif %}
 </div>
+{% endcomment %}
+
+{% if site.data.repositories.github_repos %}
+### Collection of some of my key projects
+<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-start align-items-center">
+  {% for repo in site.data.repositories.github_repos %}
+    {% include repository/repo.liquid repository=repo %}
+  {% endfor %}
+</div>
+{% endif %}
