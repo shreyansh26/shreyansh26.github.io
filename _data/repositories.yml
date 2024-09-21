@@ -7,7 +7,11 @@ github_repos:
   - shreyansh26/Annotated-ML-Papers
   - shreyansh26/MLSys-Experiments
   - shreyansh26/FlashAttention-PyTorch
-  - shreyansh26/Extracting-Training-Data-from-Large-Langauge-Models
   - shreyansh26/Speculative-Sampling
+  - shreyansh26/SparseMatrix-Computation-CUDA
+  - shreyansh26/Attention-Mask-Patterns
+  - shreyansh26/Extracting-Training-Data-from-Large-Langauge-Models
+  - shreyansh26/ML-Paper-Implementations
+  - shreyansh26/LLM-Activation-Steering-Experiments
   - shreyansh26/DeepLearning-in-the-Browser
   - shreyansh26/Linux-Malware-Detection-Research
