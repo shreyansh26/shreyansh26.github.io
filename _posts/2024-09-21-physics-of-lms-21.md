@@ -108,12 +108,11 @@ Studio’s Backpack and each Dance Studio’s School Daypack. The number of each
     - The authors demonstrate that the GPT2 model, pretrained on the synthetic dataset, not only achieves 99% accuracy in solving math problems from the same distribution but also out-of-distribution generalizes, such as to those of longer reasoning lengths than any seen during training. 
     - Note that the model has never seen any training example of the same length as in test time. 
     - This signifies that the model can truly learn some reasoning skill instead of memorizing solution templates.  
+    - Crucially, the model can learn to generate shortest solutions, almost always avoiding unnecessary computations. 
+    - This suggests that the model formulates a plan before it generates, in order to avoid computing any quantities that are not needed towards solving the underlying math problem.  
 
 {% include image.liquid url="/assets/img/posts_images/physics_of_lms_21/test_acc_3.png" description="" %}
 
-    - Crucially, the model can learn to generate shortest solutions, almost always avoiding unnecessary computations. 
-    - This suggests that the model formulates a plan before it generates, in order to avoid computing any quantities that are not needed towards solving the underlying math problem.  
-    
 {% include image.liquid url="/assets/img/posts_images/physics_of_lms_21/fig_4.png" description="" %}
  
 ## Key Result - Model's Mental Process
