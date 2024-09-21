@@ -2,7 +2,7 @@
 layout: page
 title: Bookshelf
 permalink: /bookshelf/
-description: "A list of books I've read and some of which I've found useful :)"
+description: "A list of books I've read and some of which I've found interesting :)"
 nav: true
 nav_order: 4
 display_categories: [work, fun]
