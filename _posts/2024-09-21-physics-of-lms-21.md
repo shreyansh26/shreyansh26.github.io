@@ -17,7 +17,8 @@ toc:
 {% include image.liquid url="/assets/img/posts_images/physics_of_lms_21/featured.png" description="" %}
 
 **Paper**: [Arxiv Link](https://arxiv.org/abs/2407.20311)  
-**Video**: [YouTube Link](https://www.youtube.com/watch?v=bpp6Dz8N2zY)  
+**Video**: [YouTube Link](https://www.youtube.com/watch?v=bpp6Dz8N2zY)    
+**Annotated Paper**: [Github repo](https://github.com/shreyansh26/Annotated-ML-Papers/blob/main/LLMs/Physics%20of%20Large%20Language%20Models/Part%202.1%2C%20Grade-School%20Math%20and%20the%20Hidden%20Reasoning%20Process.pdf)  
 
 ---
 
