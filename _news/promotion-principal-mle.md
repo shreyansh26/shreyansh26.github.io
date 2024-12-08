@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Promoted to Principa ML Engineer at Level AI!
+Promoted to Principal ML Engineer at Level AI!
