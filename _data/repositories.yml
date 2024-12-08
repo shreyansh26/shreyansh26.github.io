@@ -8,6 +8,7 @@ github_repos:
   - shreyansh26/MLSys-Experiments
   - shreyansh26/FlashAttention-PyTorch
   - shreyansh26/Speculative-Sampling
+  - shreyansh26/LLM-Sampling
   - shreyansh26/SparseMatrix-Computation-CUDA
   - shreyansh26/Attention-Mask-Patterns
   - shreyansh26/Extracting-Training-Data-from-Large-Langauge-Models
