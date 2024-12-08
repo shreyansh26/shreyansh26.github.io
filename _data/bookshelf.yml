@@ -1,7 +1,17 @@
-lastupdate: September 21, 2024
+lastupdate: December 08, 2024
 list:
   - year: "2024"
     books:
+      - title: "Programming Massively Parallel Processors: A Hands-on Approach"
+        author: "Wen-Mei W Hwu, David B. Kirk, Izzat El Hajj"
+        link: https://www.goodreads.com/book/show/59856387-programming-massively-parallel-processors
+        star: yes
+
+      - title: "Good Girl, Bad Blood (A Good Girl's Guide to Murder #2)"
+        author: Holly Jackson
+        link: https://www.goodreads.com/book/show/51335759-good-girl-bad-blood
+        star: no
+
       - title: "A Good Girl's Guide to Murder (A Good Girl's Guide to Murder, #1)"
         author: Holly Jackson
         link: https://goodreads.com/book/show/40916679
