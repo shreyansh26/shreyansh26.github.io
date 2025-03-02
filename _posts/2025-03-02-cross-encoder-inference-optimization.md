@@ -8,7 +8,7 @@ tags: inference-optimization efficiency mlsys
 categories: ["MLSys"]
 giscus_comments: true
 related_posts: false
-permalink: "post/2025-03-02_cross-encoder-inference-optimization/"
+permalink: "post/2025-03-02_cross-encoder-inference-torch-compile/"
 featured: false
 toc:
   sidebar: left
