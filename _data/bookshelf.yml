@@ -1,5 +1,22 @@
 lastupdate: December 08, 2024
 list:
+  - year: "2025"
+    books:
+      - title: "The Spy and the Traitor: The Greatest Espionage Story of the Cold War"
+        author: "Ben Macintyre"
+        link: https://www.goodreads.com/book/show/51770358-the-spy-and-the-traitor
+        star: yes
+
+      - title: "1984"
+        author: "George Orwell"
+        link: https://www.goodreads.com/book/show/61439040-1984
+        star: yes
+
+      - title: "As Good As Dead (A Good Girl's Guide to Murder, #1)"
+        author: "Holly Jackson"
+        link: https://www.goodreads.com/book/show/56905097-as-good-as-dead
+        star: yes
+
   - year: "2024"
     books:
       - title: "Programming Massively Parallel Processors: A Hands-on Approach"
