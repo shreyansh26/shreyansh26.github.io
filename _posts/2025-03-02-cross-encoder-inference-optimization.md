@@ -129,7 +129,7 @@ if on_sorted_inputs:
 ## But why set `use_flash_attn = False`?
 While Flash Attention is generally faster than vanilla attention implementations, there are several technical reasons why I disabled it when using torch.compile for this particular optimization:
 
-### 1. FlashAttention is already a compiled CUDA kernel
+<!-- ### 1. FlashAttention is already a compiled CUDA kernel
 
 Flash Attention operates through highly optimized CUDA kernels that are already compiled for performance:
 
@@ -160,11 +160,40 @@ def forward(self, qkv, causal=None, cu_seqlens=None, max_seqlen=None):
         )
 ```
 
-Applying torch.compile on top of an already compiled kernel was giving errors. 
+Applying torch.compile on top of an already compiled kernel was giving errors.  -->
 
-### 2. Variable sequence lengths complicate tracing
+### 1. Variable sequence lengths complicate tracing
 
-The goal of our bucketing strategy was to have a consistent and a small number of tensor shapes for efficient compilation. However, the unpadding mechanism in the original Flash Attention implementation leads to dynamic tensor shapes that are difficult to trace:
+Flash Attention operates through highly optimized CUDA kernels that are already compiled for performance:
+
+```python
+# In FlashSelfAttention, from mha.py - showing Flash Attention's compiled nature
+# https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/blob/main/mha.py
+def forward(self, qkv, causal=None, cu_seqlens=None, max_seqlen=None):
+    # ...
+    if unpadded:
+        # Using pre-compiled CUDA kernel
+        return flash_attn_varlen_qkvpacked_func(
+            qkv,
+            cu_seqlens,
+            max_seqlen,
+            self.drop.p if self.training else 0.0,
+            softmax_scale=self.softmax_scale,
+            causal=causal,
+            # ...
+        )
+    else:
+        # Using pre-compiled CUDA kernel
+        return flash_attn_qkvpacked_func(
+            qkv,
+            self.drop.p if self.training else 0.0,
+            softmax_scale=self.softmax_scale,
+            causal=causal,
+            # ...
+        )
+```
+
+The goal of our bucketing strategy was to have a consistent and a small number of tensor shapes for efficient compilation. However, when using `flash_attn_varlen_qkvpacked_func` the unpadding mechanism in the original Flash Attention implementation leads to dynamic tensor shapes that are difficult to trace:
 
 ```python
 # From xlm_padding.py, and called in modeling_xlm_roberta.py
@@ -188,7 +217,7 @@ def unpad_input(hidden_states, attention_mask):
 
 This operation creates tensors with sizes dependent on the input data, which conflicts with our bucketing strategy where we want to pad to the nearest multiple of 16. This dynamic sizing makes it challenging for torch.compile to effectively trace and optimize the model.
 
-### 3. Attention mask handling limitations
+### 2. Attention mask handling limitations
 
 The alternative in the code was to use `flash_attn_qkvpacked_func` which doesn't offer the flexibility we needed for custom attention masking as it expects qkv matrices together and internally handles causal or non-causal masking.
 
@@ -206,7 +235,7 @@ return flash_attn_qkvpacked_func(
 )
 ```
 
-While there is a regular `flash_attn_func` that might have worked, integrating our attention mask to mask padding tokens was not straightforward for me.
+While there is a regular `flash_attn_func` that might have worked, integrating our attention mask to mask padding tokens was not straightforward.
 
 ## The Hybrid Approach
 
