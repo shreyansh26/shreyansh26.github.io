@@ -29,6 +29,11 @@ pagination:
   </div>
   {% endif %}
 
+  <!-- Subscribe button section -->
+  <div class="subscribe-section" style="text-align: center; margin: 15px 0 5px 0;">
+    <button id="openpopup" class="subscribe-button" style="margin: 0 auto; display: block;">Subscribe to my posts!</button>
+  </div>
+
 {% if site.display_tags or site.display_categories %}
 
   <div class="tag-category-list">
@@ -192,5 +197,45 @@ pagination:
 {% if page.pagination.enabled %}
 {% include pagination.liquid %}
 {% endif %}
+
+<!-- Mailchimp subscription scripts and styles -->
+<script type="text/javascript" src="//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script>
+  
+<style>
+  .subscribe-button {
+    color: #fff !important;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: #3f51b5;
+    padding: 4px 8px;
+    font-size: 0.8em;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    border: none;
+    transition: all 0.4s ease 0s;
+    margin: 0;
+  }
+
+  .subscribe-button:hover {
+    background: #434343;
+    letter-spacing: 1px;
+    -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+    -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+    box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+    transition: all 0.4s ease 0s;
+  }
+</style>
+
+<script type="text/javascript">
+  function showMailingPopUp() {
+    window.dojoRequire(["mojo/signup-forms/Loader"], function(L) { 
+      L.start({"baseUrl":"mc.us4.list-manage.com","uuid":"0b10ac14f50d7f4e7d11cf26a","lid":"667a1bb3da","uniqueMethods":true}) 
+    })
+    document.cookie = "MCPopupClosed=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+  }
+
+  document.getElementById("openpopup").onclick = function() {showMailingPopUp()};
+</script>
 
 </div>
