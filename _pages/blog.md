@@ -225,6 +225,32 @@ pagination:
     box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
     transition: all 0.4s ease 0s;
   }
+
+  /* Fix for tag-category list mobile spacing */
+  @media (max-width: 768px) {
+    .tag-category-list ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5px;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    
+    .tag-category-list ul li {
+      margin: 0 !important;
+      padding: 0 !important;
+      line-height: 1.5 !important;
+      display: inline-block;
+    }
+    
+    .tag-category-list ul p {
+      margin: 0 3px !important;
+      padding: 0 !important;
+      line-height: 1.5 !important;
+      display: inline-block;
+    }
+  }
 </style>
 
 <script type="text/javascript">
