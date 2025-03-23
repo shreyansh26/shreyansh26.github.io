@@ -23,9 +23,75 @@ $(document).ready(function () {
     $(".publications h2").each(function () {
       $(this).attr("data-toc-skip", "");
     });
+
     var navSelector = "#toc-sidebar";
     var $myNav = $(navSelector);
+    
+    // Save original functions
+    var originalGetHeadings = Toc.helpers.getHeadings;
+    var originalPopulateNav = Toc.helpers.populateNav;
+    
+    // Override the getHeadings function
+    Toc.helpers.getHeadings = function(el, topLevel) {
+      return this.findOrFilter(el, "h1, h2, h3").filter(":not([data-toc-skip])");
+    };
+    
+    // Override the populateNav function to handle proper nesting
+    Toc.helpers.populateNav = function(nav, topLevel, headings) {
+      var self = this;
+      var lastH1Item = null;
+      var lastH2Item = null;
+      
+      headings.each(function(i, heading) {
+        var level = self.getNavLevel(heading);
+        var navItem = self.generateNavItem(heading);
+        
+        // Different nesting based on heading level
+        if (level === 1) {
+          // h1 goes in the main nav
+          nav.append(navItem);
+          lastH1Item = navItem;
+          lastH2Item = null;
+        } else if (level === 2) {
+          // h2 goes under its parent h1
+          if (lastH1Item) {
+            var h1ChildNav = lastH1Item.find('> ul.nav');
+            if (h1ChildNav.length === 0) {
+              h1ChildNav = self.createChildNavList(lastH1Item);
+            }
+            h1ChildNav.append(navItem);
+            lastH2Item = navItem;
+          } else {
+            // No parent h1, append to main nav
+            nav.append(navItem);
+            lastH2Item = navItem;
+          }
+        } else if (level === 3) {
+          // h3 goes under its parent h2
+          if (lastH2Item) {
+            var h2ChildNav = lastH2Item.find('> ul.nav');
+            if (h2ChildNav.length === 0) {
+              h2ChildNav = self.createChildNavList(lastH2Item);
+            }
+            h2ChildNav.append(navItem);
+          } else {
+            // No parent h2, append to main nav or h1 depending on context
+            if (lastH1Item) {
+              var h1ChildNav = lastH1Item.find('> ul.nav');
+              if (h1ChildNav.length === 0) {
+                h1ChildNav = self.createChildNavList(lastH1Item);
+              }
+              h1ChildNav.append(navItem);
+            } else {
+              nav.append(navItem);
+            }
+          }
+        }
+      });
+    };
+    
     Toc.init($myNav);
+    
     $("body").scrollspy({
       target: navSelector,
     });
