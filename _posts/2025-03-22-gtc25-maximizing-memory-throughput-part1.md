@@ -23,7 +23,7 @@ You can watch the talk here - [link](https://register.nvidia.com/flow/nvidia/gtc
 
 The talk had two major sections - maximizing memory throughput, and memory models and hiding latency. For clarity of thought and understanding, I will split my notes into two parts.    
 
-<!-- Refer to part 2 of the notes [here](/post/2025-03-23_gtc25-maximize-memory-bandwidth-part-2/). -->
+Refer to part 2 of the notes [here](/post/2025-03-23_gtc25-maximize-memory-bandwidth-part-2/).
 
 ---
 
@@ -264,7 +264,7 @@ Size of chunk of data can determine LDGSTS or TMA.
 
 Hope this was helpful!
 
-<!-- Refer to part 2 of the notes [here](/post/2025-03-23_gtc25-maximize-memory-bandwidth-part-2/). -->
+Refer to part 2 of the notes [here](/post/2025-03-23_gtc25-maximize-memory-bandwidth-part-2/).
 
 ---
 
