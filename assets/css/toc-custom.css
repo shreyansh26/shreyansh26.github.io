@@ -6,7 +6,7 @@
 /* Make ALL entries the same font weight */
 #toc-sidebar .nav li > a {
   font-weight: 500 !important;
-  font-size: 0.8em !important;
+  font-size: 0.7em !important;
   display: block;
 }
 
