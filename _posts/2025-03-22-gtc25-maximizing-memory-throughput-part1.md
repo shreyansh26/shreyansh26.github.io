@@ -3,7 +3,7 @@ layout: post
 title: "Notes from GTC'25: CUDA Techniques to Maximize Memory Bandwidth and Hide Latency - Part 1"
 date: 2025-03-23
 author: "Shreyansh Singh"
-description: "First part of my notes from the talk on maximzing memory bandwidth at NVIDIA GTC 2025."
+description: "First part of my notes from the talk on maximizing memory bandwidth at NVIDIA GTC 2025."
 tags: cuda mlsys
 categories: ["MLSys"]
 giscus_comments: true
@@ -23,7 +23,7 @@ You can watch the talk here - [link](https://register.nvidia.com/flow/nvidia/gtc
 
 The talk had two major sections - maximizing memory throughput, and memory models and hiding latency. For clarity of thought and understanding, I will split my notes into two parts.    
 
-<!-- Refer to part 2 of the notes [here](/post/2025-03-22_gtc25-maximize-memory-bandwidth-part-2/). -->
+<!-- Refer to part 2 of the notes [here](/post/2025-03-23_gtc25-maximize-memory-bandwidth-part-2/). -->
 
 ---
 
@@ -68,7 +68,7 @@ Sometimes manual unrolling may be needed
 
 ## Increasing DLP
 
-**Using vecotrized loads**    
+**Using vectorized loads**    
 
 {% include image.liquid url="/assets/img/posts_images/gtc_memory_bandwidth/dlp_1.png" description="Source: Slides from the talk" %}
 {% include image.liquid url="/assets/img/posts_images/gtc_memory_bandwidth/dlp_2.png" description="Source: Slides from the talk" %}
@@ -81,7 +81,7 @@ Implicit casting to vector pointers can also be used.
 
 ## Increasing ILP and DLP increase register pressure
 
-The previous techniques mentioned above increase the byte-in-flight at the cost of increased regsiter usage.   
+The previous techniques mentioned above increase the byte-in-flight at the cost of increased register usage.   
 * Bytes-in-flight need to be backed by registers.   
 * May lead to register spills to local memory.
 
@@ -95,7 +95,7 @@ Therefore, not many registers are left for computation.
 
 Asynchronous data copies are a way to skip the registers and go directly to shared memory.   
 * Free up more registers for computation.
-* Reduce L1 trasffic
+* Reduce L1 traffic
 * Reduce MIO pressure (less instructions)
 
 
@@ -228,7 +228,7 @@ Waiting here is faster as we are essentially checking if data has arrived or not
 
 For this, the `invoke_one` function from cooperative groups API is used.
 
-### Using Async copies for bacthed computation
+### Using Async copies for batched computation
 
 {% include image.liquid url="/assets/img/posts_images/gtc_memory_bandwidth/tma_async_batch_1.png" description="Source: Slides from the talk" %}
 
@@ -262,9 +262,11 @@ Size of chunk of data can determine LDGSTS or TMA.
 
 ---
 
-<!-- Refer to part 2 of the notes [here](/post/2025-03-22_gtc25-maximize-memory-bandwidth-part-2/).
+Hope this was helpful!
 
---- -->
+<!-- Refer to part 2 of the notes [here](/post/2025-03-23_gtc25-maximize-memory-bandwidth-part-2/). -->
+
+---
 
 &nbsp;
 
