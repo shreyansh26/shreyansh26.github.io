@@ -68,6 +68,19 @@ Metrics to look at (in NCU) to detect divergence:
         * Derivative metric has higher value for the top level divergence.     
         * Divergent Branch metric has higher value for the lower level code.    
 
+### Tips for reducing warp divergence
+
+**Causes and solutions**
+
+* If per thread work is different - Queue and bin/sort the work     
+* If per thread work is discovered at different times - Queue the work     
+* If per thread work ends at different times - Split into multiple kernels.     
+
+
+* Implement conceptual divergence via varying data, instead of varying control flow.     
+* Consider algorithmic / higher order changes to reduce divergence.     
+
+
 ---
 
 Hope this was helpful!
