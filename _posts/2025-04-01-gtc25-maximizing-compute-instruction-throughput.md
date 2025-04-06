@@ -252,8 +252,16 @@ In NCU, "Live Registers" metric can show hot-spots of high register usage.
 * Assign less work to individual threads      
 * Doing kernel fusion can also lead to increased register pressure
 
-{% include image.liquid url="/assets/img/posts_images/gtc_compute_throughput/improve_occupancy.png" description="Source: Slides from the talk" %}
+### Occupancy Limiters - Thread Block size
 
+Thread block size is a multiple of warp size (32). Even if you request fewer threads, hardware will round it up to the nearest multiple of 32.
+
+Each thread block can have a maximum size of 1024.     
+
+Each SM in Hopper can have up to 64 warps, 32 blocks and 2048 threads.
+
+
+{% include image.liquid url="/assets/img/posts_images/gtc_compute_throughput/improve_occupancy.png" description="Source: Slides from the talk" %}
 
 ## Reducing Instruction Count
 
