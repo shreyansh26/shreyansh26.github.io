@@ -6,7 +6,7 @@ subtitle:
 
 profile:
   align: right
-  image: profile_pictures/shreyansh_jaipur.jpg
+  image: profile_pictures/shreyansh_sf2.jpg
   image_circular: true # crops the image to make it circular
   # more_info: >
   #   <p>555 your office number</p>
