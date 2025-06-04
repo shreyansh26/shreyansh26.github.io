@@ -1,6 +1,6 @@
 <div class="outer">
-  <figure class="image">
-    <img src="{{ include.url }}" alt="{{ include.description }}">
+  <figure class="image" {% if include.width %}style="width: {{ include.width }};"{% endif %}>
+    <img src="{{ include.url }}" alt="{{ include.description }}" {% if include.height %}height="{{ include.height }}"{% endif %}>
     <figcaption>{{ include.description }}</figcaption>
     <br>
   </figure>
@@ -20,9 +20,10 @@
   }
 
   .image img {
-    max-width: 100%; /* Image won't exceed the container's width */
-    width: auto; /* Resize the image to the full width of the figure */
+    display: block; /* Removes bottom space, allows margin auto if figure not centered */
+    width: 100%; /* Make image fill the figure container */
     height: auto; /* Maintain aspect ratio */
+    max-width: 100%; /* Still good to have */
   }
 
   /*** Base Caption Styles ***/
@@ -46,11 +47,11 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-  }`
+  }
   figure.embed figcaption,
   figure.embed-top figcaption,
   figure.overlay figcaption,
-  figure.embed-over figcaption {`
+  figure.embed-over figcaption {
     width: 100%;
     padding: 0.5em;
     /* neutral theme */
