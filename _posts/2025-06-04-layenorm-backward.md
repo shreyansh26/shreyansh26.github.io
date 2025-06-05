@@ -210,6 +210,18 @@ $$
 }
 $$
 
+where,
+
+$$
+\boxed{
+\begin{aligned}
+c_1 = \frac{1}{N} \sum_k (d\hat{x}'_k \cdot \hat{x}_k) &= \frac{1}{N} \sum_k ( (dy_k \cdot \gamma_k) \cdot \hat{x}_k ) \\
+c_2 = \frac{1}{N} \sum_k d\hat{x}'_k &= \frac{1}{N} \sum_k (dy_k \cdot \gamma_k) \\
+d\hat{x}'_j &= dy_j \cdot \gamma_j
+\end{aligned}
+}
+$$
+
 ---
 
 Hope this was helpful!
