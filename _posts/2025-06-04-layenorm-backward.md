@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "Deriving the Gradient for the Backward Pass of Layer Normalization"
-date: 2025-06-05
+date: 2025-06-04
 author: "Shreyansh Singh"
 description: "Understanding the math behind Layer Normalization and deriving the gradients for the backward pass."
 tags: ml math
 categories: ["ML"]
 giscus_comments: true
 related_posts: false
-permalink: "post/2025-06-05_layernorm-gradients/"
+permalink: "post/2025-06-04_layernorm-gradients/"
 featured: false
 toc:
   sidebar: left
