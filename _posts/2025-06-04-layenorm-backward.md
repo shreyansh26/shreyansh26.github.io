@@ -256,6 +256,35 @@ Hope this was helpful!
         box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
         transition: all 0.4s ease 0s;
     }
+
+    /* Styles for horizontally scrollable equations on small screens */
+    @media (max-width: 768px) {
+      /* MathJax v2 and older */
+      .MathJax_Display {
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 10px; /* Space for scrollbar */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      }
+
+      /* MathJax v3 */
+      mjx-container[display="true"] {
+        display: block; /* Ensure block context for overflow */
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 10px; /* Space for scrollbar */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      }
+
+      /* A more general approach if the above are not specific enough,
+         targets divs that directly contain scripts of type math/tex; mode=display */
+      div:has(> script[type="math/tex; mode=display"]) {
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 10px; /* Space for scrollbar */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      }
+    }
 </style>
 
 
