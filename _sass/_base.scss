@@ -253,7 +253,7 @@ ul.task-list input[type="checkbox"] {
 
 @media (min-width: 576px) {
   .profile {
-    width: 30%;
+    width: 25%;
 
     .address {
       p {
@@ -934,9 +934,28 @@ html.transition *:after {
 }
 
 // Extra Markdown style (post Customization)
+$post-image-max-width: 1200px;
+$post-image-max-width-toc: 900px;
 .post {
   .post-content {
     font-size: 1.2rem;
+
+    #markdown-content figure:not(.highlight) {
+      max-width: $post-image-max-width;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #markdown-content figure:not(.highlight) img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    #markdown-content img {
+      max-width: $post-image-max-width;
+      height: auto;
+    }
   }
 
   .post-meta {
@@ -957,6 +976,17 @@ html.transition *:after {
 
       &:hover {
         color: var(--global-theme-color);
+      }
+    }
+  }
+}
+
+.toc-content {
+  .post {
+    .post-content {
+      #markdown-content figure:not(.highlight),
+      #markdown-content img {
+        max-width: $post-image-max-width-toc;
       }
     }
   }

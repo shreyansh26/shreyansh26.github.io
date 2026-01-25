@@ -31,6 +31,22 @@ body.sticky-bottom-footer {
   max-width: $max-content-width;
 }
 
+// Fixed-width sidebar for TOC layout on large screens.
+$toc-sidebar-width: 300px;
+@media (min-width: 992px) {
+  .toc-layout {
+    .toc-sidebar {
+      flex: 0 0 $toc-sidebar-width;
+      max-width: $toc-sidebar-width;
+    }
+
+    .toc-content {
+      flex: 1 1 calc(100% - #{$toc-sidebar-width});
+      max-width: calc(100% - #{$toc-sidebar-width});
+    }
+  }
+}
+
 // Profile
 .profile {
   img {
