@@ -4,6 +4,7 @@ title: "Paper Summary #12 - Image Recaptioning in DALL-E 3"
 date: 2024-02-18 08:00:00
 author: "Shreyansh Singh"
 description: "The image recaptioning technique used in DALL-E 3 was extended to videos in Sora."
+thumbnail: /assets/img/posts_images/dalle3_image_recaptioner/featured.png
 tags: image-captioning generative-ai
 categories: ["Computer Vision"]
 giscus_comments: true

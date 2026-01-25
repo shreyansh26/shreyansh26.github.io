@@ -4,6 +4,7 @@ title: "Deep Learning in the Browser - Exploring TF.js, WebDNN and ONNX.js"
 date: 2021-01-25
 author: "Shreyansh Singh"
 description: "A quick tutorial to set up a small scale deployment for your ML or DL model"
+thumbnail: /assets/img/posts_images/dl_in_browser/featured.png
 tags: ["model-deployment", "machine learning", "web"]
 categories: ["MLOps"]
 giscus_comments: true

@@ -4,6 +4,7 @@ title: "watevrCTF 2019 Writeups (Mainly Rev and Pwn)"
 date: 2019-12-15
 author: "Shreyansh Singh"
 description: "My writeups for the challenges I solved in the CTF. I mainly focused on Rev and Pwn categories."
+thumbnail: /assets/img/posts_images/watevr_ctf/featured.png
 tags: ["reverse engineering", "pwn", "ctf", "writeups"]
 categories: ["Information Security"]
 giscus_comments: true

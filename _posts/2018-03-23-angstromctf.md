@@ -4,6 +4,7 @@ title: "AngstromCTF Writeups"
 date: 2018-03-23
 author: "Shreyansh Singh"
 description: "These are the writeups to the problems I solved during the AngstromCTF."
+thumbnail: /assets/img/posts_images/angstromctf/featured.png
 tags: ["cryptography", "web", "pwn", "reverse engineering", "ctf", "writeups"]
 categories: ["Information Security"]
 giscus_comments: true

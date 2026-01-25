@@ -4,6 +4,7 @@ title: "Deriving the Gradient for the Backward Pass of Layer Normalization"
 date: 2025-06-04
 author: "Shreyansh Singh"
 description: "Understanding the math behind Layer Normalization and deriving the gradients for the backward pass."
+thumbnail: /assets/img/posts_images/layer_norm_backward/layer_norm_4o.png
 tags: ml math
 categories: ["ML"]
 giscus_comments: true

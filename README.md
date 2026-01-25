@@ -388,7 +388,7 @@ A variety of beautiful theme colors have been selected for you to choose from. T
 
 **al-folio** supports preview images on social media. To enable this functionality you will need to set `serve_og_meta` to `true` in your [\_config.yml](_config.yml). Once you have done so, all your site's pages will include Open Graph data in the HTML head element.
 
-You will then need to configure what image to display in your site's social media previews. This can be configured on a per-page basis, by setting the `og_image` page variable. If for an individual page this variable is not set, then the theme will fall back to a site-wide `og_image` variable, configurable in your [\_config.yml](_config.yml). In both the page-specific and site-wide cases, the `og_image` variable needs to hold the URL for the image you wish to display in social media previews.
+You will then need to configure what image to display in your site's social media previews. This can be configured on a per-page basis, by setting the `thumbnail` page variable. If for an individual page this variable is not set, then the theme will fall back to a site-wide `thumbnail` variable, configurable in your [\_config.yml](_config.yml). In both the page-specific and site-wide cases, the `thumbnail` variable needs to hold the URL for the image you wish to display in social media previews.
 
 ---
 

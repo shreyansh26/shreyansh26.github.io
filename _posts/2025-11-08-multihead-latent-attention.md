@@ -4,7 +4,7 @@ title: "Understanding Multi-Head Latent Attention (MLA)"
 date: 2025-11-08
 author: "Shreyansh Singh"
 description: "A mathematical and code deep-dive on one of the key innovations from Deepseek - Multihead Latent Attention (MLA)"
-og_image: /assets/img/posts_images/mla/mla_cover.png
+thumbnail: /assets/img/posts_images/mla/mla_cover.png
 tags: attention mla
 categories: ["LLMs"]
 giscus_comments: true

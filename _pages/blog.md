@@ -125,9 +125,10 @@ pagination:
     {% assign tags = post.tags | join: "" %}
     {% assign categories = post.categories | join: "" %}
 
+    {% assign list_image = post.thumbnail %}
     <li>
 
-{% if post.thumbnail %}
+{% if list_image %}
 
 <div class="row">
           <div class="col-sm-9">
@@ -179,12 +180,12 @@ pagination:
           {% endif %}
     </p>
 
-{% if post.thumbnail %}
+{% if list_image %}
 
 </div>
 
   <div class="col-sm-3">
-    <img class="card-img" src="{{post.thumbnail | relative_url}}" style="object-fit: cover; height: 90%" alt="image">
+    <img class="card-img" src="{{ list_image | absolute_url }}" style="width: 100%; height: auto; object-fit: contain;" alt="{{ post.title }}">
   </div>
 </div>
 {% endif %}

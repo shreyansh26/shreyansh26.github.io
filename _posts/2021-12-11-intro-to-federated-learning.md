@@ -4,6 +4,7 @@ title: "PPML Series #1 - An introduction to Federated Learning"
 date: 2021-12-11   
 author: "Shreyansh Singh"
 description: A short general introduction to Federated Learning (FL) for folks interested in privacy-preserving machine learning (PPML).
+thumbnail: /assets/img/posts_images/intro_to_ferderated_learning/featured.png
 tags: ["federated learning", "ppml", "paper-summaries"]
 categories: ["PPML"]
 giscus_comments: true

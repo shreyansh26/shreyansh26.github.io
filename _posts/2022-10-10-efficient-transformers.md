@@ -4,6 +4,7 @@ title: "Paper Summary #7 - Efficient Transformers: A Survey"
 date: 2022-10-10
 author: "Shreyansh Singh"
 description: A survey paper of improvements over the original Transformer architecture in terms of memory-efficiency.
+thumbnail: /assets/img/posts_images/efficient_transformers/featured.png
 tags: mlsys transformer efficiency attention paper-summaries
 categories: ["MLSys", "LLMs"]
 giscus_comments: true

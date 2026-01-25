@@ -65,7 +65,7 @@ max_width: 1440px
 # see https://schema.org/docs/faq.html for more information
 serve_og_meta: true # Include Open Graph meta tags in the HTML head
 serve_schema_org: false # Include Schema.org in the HTML head
-og_image: /assets/img/prof_pic_color.png # Default Open Graph preview image
+thumbnail: /assets/img/prof_pic_color.png # Default Open Graph + blog preview image
 
 # -----------------------------------------------------------------------------
 # Social integration

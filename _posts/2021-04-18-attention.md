@@ -4,6 +4,7 @@ title: "Paper Summary #1 - Attention Is All You Need"
 date: 2021-04-18
 author: "Shreyansh Singh"
 description: "The first of the paper summary series. This is where I briefly summarise the important papers that I read for my job or just for fun :P"
+thumbnail: /assets/img/posts_images/attention/featured.png
 tags: ["attention", "language model", "paper-summaries"]
 categories: ["NLP"]
 giscus_comments: true

@@ -4,6 +4,7 @@ title: "Notes from GTC'25: CUDA Techniques to Maximize Memory Bandwidth and Hide
 date: 2025-03-23
 author: "Shreyansh Singh"
 description: "Second part of my notes from the talk on maximizing memory bandwidth at NVIDIA GTC 2025."
+thumbnail: /assets/img/posts_images/gtc_memory_bandwidth/cover.png
 tags: cuda mlsys
 categories: ["MLSys"]
 giscus_comments: true

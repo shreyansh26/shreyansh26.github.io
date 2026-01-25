@@ -4,6 +4,7 @@ title: "Paper Summary #11 - Sora"
 date: 2024-02-18 07:00:00
 author: "Shreyansh Singh"
 description: "OpenAI announced a ground-breaking text-to-video diffusion model capable of generating high-definition videos up to 60 seconds long."
+thumbnail: /assets/img/posts_images/sora_openai/featured.png
 tags: diffusion image-generation video-generation generative-ai
 categories: ["Computer Vision"]
 giscus_comments: true

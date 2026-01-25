@@ -4,6 +4,7 @@ title: "Deploying Machine Learning models using AWS Lambda and Github Actions - 
 date: 2022-01-23   
 author: "Shreyansh Singh"
 description: A step-wise tutorial to demonstrate the steps required to deploy a ML model using AWS Lambda, Github Actions, API Gateway and use Streamlit to access the model API through a UI.
+thumbnail: /assets/img/posts_images/model_deployment_aws/featured.jpg
 tags: model-deployment aws streamlit github-actions
 categories: ["MLOps"]
 giscus_comments: true
@@ -14,7 +15,7 @@ toc:
   sidebar: left
 ---
 
-{% include image.liquid url="/assets/img/posts_images/model_deployment_aws/featured.png" description="" %}
+{% include image.liquid url="/assets/img/posts_images/model_deployment_aws/featured.jpg" description="" %}
 
 ---
 

@@ -4,6 +4,7 @@ title: "Deploying Machine Learning models using GCP's Google AI Platform - A Det
 date: 2022-03-06    
 author: "Shreyansh Singh"
 description: A step-wise tutorial to demonstrate the steps required to deploy a ML model using GCP, specifically the Google AI Platform and use Streamlit to access the model through a UI.
+thumbnail: /assets/img/posts_images/model_deployment_gcp/featured.jpg
 tags: model-deployment gcp streamlit
 categories: ["MLOps"]
 giscus_comments: true
@@ -14,7 +15,7 @@ toc:
   sidebar: left
 ---
 
-{% include image.liquid url="/assets/img/posts_images/model_deployment_gcp/featured.png" description="" %}
+{% include image.liquid url="/assets/img/posts_images/model_deployment_gcp/featured.jpg" description="" %}
 
 ----
 
@@ -147,7 +148,7 @@ Using the AI Platform, we need to create a model
 
 {% include image.liquid url="/assets/img/posts_images/model_deployment_gcp/aiplatform-models.PNG" description="" %}
 
-{% include image.liquid url="/assets/img/posts_images/model_deployment_gcp/aiplatfrom-create.PNG" description="" %}
+{% include image.liquid url="/assets/img/posts_images/model_deployment_gcp/aiplatform-create.PNG" description="" %}
 
 Next, create a version of the model.
 

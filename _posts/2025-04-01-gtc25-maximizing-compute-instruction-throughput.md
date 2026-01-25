@@ -4,6 +4,7 @@ title: "Notes from GTC'25: CUDA Techniques to Maximize Compute and Instruction T
 date: 2025-04-04
 author: "Shreyansh Singh"
 description: "My notes from the talk on maximizing compute and instruction throughput at NVIDIA GTC 2025."
+thumbnail: /assets/img/posts_images/gtc_compute_throughput/cover.png
 tags: cuda mlsys
 categories: ["MLSys"]
 giscus_comments: true

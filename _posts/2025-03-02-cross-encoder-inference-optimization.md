@@ -4,6 +4,7 @@ title: "Faster Cross-Encoder Inference: Unleashing torch.compile for speed"
 date: 2025-03-02
 author: "Shreyansh Singh"
 description: "A quick writeup on accelerating a Jina Cross-Encoder using torch.compile"
+thumbnail: /assets/img/posts_images/jina_torch_compile/image.png
 tags: inference-optimization efficiency mlsys
 categories: ["MLSys"]
 giscus_comments: true

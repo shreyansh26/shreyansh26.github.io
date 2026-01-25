@@ -4,6 +4,7 @@ title: "NeverLAN CTF 2018 Writeups"
 date: 2018-02-27
 author: "Shreyansh Singh"
 description: "These are the writeups of the problems I solved over the weekend for the NeverLAN CTF 2018."
+thumbnail: /assets/img/posts_images/neverlanctf/featured.png
 tags: ["cryptography", "web", "pwn", "reverse engineering", "ctf", "writeups"]
 categories: ["Information Security"]
 giscus_comments: true

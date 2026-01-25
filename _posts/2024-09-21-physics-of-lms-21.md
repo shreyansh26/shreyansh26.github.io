@@ -4,6 +4,7 @@ title: "Paper Summary #13 - Physics of Language Models: Part 2.1, Grade-School M
 date: 2024-09-21
 author: "Shreyansh Singh"
 description: "My notes from the Physics of Language Models series of papers."
+thumbnail: /assets/img/posts_images/physics_of_lms_21/featured.png
 tags: transformer reasoning paper-summaries
 categories: ["LLMs"]
 giscus_comments: true
