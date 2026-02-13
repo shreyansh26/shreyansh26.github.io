@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "CUDA Scan Kernels: Hierarchical and Single-Pass Variants"
+title: "Deep dive into CUDA Scan Kernels: Hierarchical and Single-Pass Variants"
 date: 2026-01-24
 author: "Shreyansh Singh"
 description: "A guided tour of hierarchical and single-pass CUDA scan kernels with coarsening and warp-level optimizations."
@@ -54,13 +54,33 @@ This is a major performance factor, and it strongly influences how the kernels i
 ### Idea of hierarchical scan
 Hierarchical scan decomposes the full scan into three stages that are easy to parallelize:
 
-1. **Per-block scan**: each block scans a contiguous chunk of the input and writes its local output Y.
-   The last thread in the block also writes the block total to `partialSums`.
-2. **Scan of partial sums**: the array of block totals is itself scanned. If it is longer than one block,
-   it is scanned hierarchically using multiple levels (see the `ScanLevels` helper in the source).
-3. **Redistribution**: each block adds the scanned prefix of all previous blocks to its local output.
+1. **Per-block scan**: each block scans a contiguous chunk of the input and writes the prefix results for that
+   chunk into the output array. Each block also emits one number: the **block total** (sum of its entire chunk).
+2. **Scan the block totals**: scan the array of block totals to produce a prefix over blocks. Block 0 adds 0;
+   block $$b>0$$ adds the scanned total of block $$b-1$$ (i.e., the sum of everything before block $$b$$). If this
+   array is long, it is scanned hierarchically using multiple levels.
+3. **Redistribution (add carry‑in)**: each block adds its carry‑in to every element of its local output, turning a
+   block-local prefix into a correct global prefix.
 
-{% include image.liquid url="/assets/img/posts_images/scan_cuda/hierarchical_scan.png" description="Hierarchical scan overview: per-block scan, scan of partial sums, and redistribution." %}
+In the source, the “block totals” buffer is called `partialSums`: it is an auxiliary array with **one entry per
+thread block**.
+
+Concretely, after stage 1 each block has computed the right prefix order relative to the start of its own chunk,
+but every block except block 0 is missing a constant offset (the sum of all earlier chunks). Scanning the block
+totals computes exactly those offsets.
+
+Example with `BLOCK_SIZE = 4`:
+
+```text
+Input:        [1 2 3 4 | 5 6 7 8]
+Local scans:  [1 3 6 10 | 5 11 18 26]
+Block totals: [10, 26]
+Scan totals:  [10, 36]
+Add carry-in: [1 3 6 10 | (5+10) (11+10) (18+10) (26+10)]
+            = [1 3 6 10 | 15 21 28 36]
+```
+
+{% include image.liquid url="/assets/img/posts_images/scan_cuda/hierarchical_scan.png" description="Hierarchical scan overview: per-block scan, scan of block totals (carry), and redistribution." %}
 
 This structure is consistent across:
 - `src/hierarchical_kogge_stone*.cu`
@@ -69,6 +89,68 @@ This structure is consistent across:
 
 A key idea for readers: the per-block scan only handles a local segment. The global correctness comes from the
 second and third stages, which propagate block totals across the array.
+
+### When the block-totals scan needs multiple levels
+Stage 2 scans **one value per block**. If each block handles $$B = $$ `BLOCK_SIZE` input elements, then the number
+of blocks is $$M = \lceil N / B \rceil$$, so the block-totals array has length $$M$$.
+
+A single CUDA block in these kernels scans at most $$B$$ values (one value per thread in shared memory), so stage 2
+is:
+
+- **one-block** when $$M \le B$$ (equivalently $$N \le B^2$$; for $$B = 1024$$, about one million elements),
+- **a small recursive hierarchy** when $$M > B$$.
+
+Conceptually, you build a short “pyramid” of group totals:
+
+- **Level 0**: per-block totals (length $$M_0 = M$$)
+- **Level 1**: totals of contiguous groups of $$B$$ entries from level 0 (length $$M_1 = \lceil M_0 / B \rceil$$)
+- …
+- stop at the first level $$L$$ with $$M_L \le B$$
+
+Then you run the same up/down structure across levels:
+
+1. **Up-sweep**: scan each level in block-sized segments and write each segment’s total into the next level.
+2. **Top scan**: scan the final level in one block.
+3. **Down-sweep**: propagate prefixes back down by adding the scanned prefix of earlier segments (the carry‑in)
+   into every element of the lower level.
+
+In `src/hierarchical_kogge_stone.cu`, this logic is packaged as `ScanLevels`: level 0 is the block-totals buffer
+(`partialSums` in the code), and higher levels are temporary allocations that shrink by ~1024× each step:
+
+```cpp
+while (curr_len > BLOCK_SIZE) {
+    unsigned int next_len = cdiv(curr_len, BLOCK_SIZE);
+    T* sums_d = nullptr;
+    CHECK_CUDA_ERROR(cudaMalloc(&sums_d, next_len * sizeof(T)));
+    levels.data.push_back(sums_d);
+    levels.lengths.push_back(next_len);
+    curr_len = next_len;
+}
+```
+
+The scan then follows the “up-sweep / top / down-sweep” pattern literally:
+
+```cpp
+for (size_t level = 0; level + 1 < levels.data.size(); ++level) {
+    unsigned int len = levels.lengths[level];
+    dim3 gridSize(cdiv(len, BLOCK_SIZE));
+    kogge_stone_segmented_scan_kernel<<<gridSize, blockSize>>>(
+        levels.data[level], levels.data[level], levels.data[level + 1], len);
+}
+
+kogge_stone_scan_kernel<<<dim3(1), blockSize>>>(
+    levels.data.back(), levels.lengths.back());
+
+for (int level = static_cast<int>(levels.data.size()) - 2; level >= 0; --level) {
+    unsigned int len = levels.lengths[level];
+    dim3 gridSize(cdiv(len, BLOCK_SIZE));
+    redistribute_sum<<<gridSize, blockSize>>>(
+        levels.data[level], levels.data[level + 1], len);
+}
+```
+
+Without this multi-level pass, stage 2 would only produce correct prefixes **within groups of $$B$$ blocks**, and
+the final redistribution would be wrong for long inputs.
 
 ### Inclusive scan, padding, and boundaries
 These kernels implement **inclusive** scan (each output includes its own input). That means the first output is
@@ -113,14 +195,21 @@ updated data incorrectly in the same stride. The temp + double barrier pattern a
 
 This file is the best place to start if you want to understand the baseline hierarchical scan flow end-to-end.
 
+**Key characteristics:**
+- **Work**: $$O(N \log N)$$ additions
+- **Depth**: $$\log_2(N)$$ parallel steps
+- **Synchronization**: Two `__syncthreads()` per iteration (read-modify-write pattern)
+- **Shared memory**: $$B$$ elements (where B is block size)
+
 ---
 
 ### Kogge-Stone scan (coarsened)
 **Kernel**: `src/hierarchical_kogge_stone_coarsening.cu`
 
 Coarsening is a standard optimization: instead of one element per thread, each thread processes multiple elements.
-This reduces the number of blocks, which reduces the size of `partialSums` and thus reduces the amount of
-hierarchical work. It also increases the work per thread, which can improve instruction-level parallelism.
+This reduces the number of blocks, which shrinks the block-totals buffer (`partialSums` in the code) and thus
+reduces the amount of hierarchical work. It also increases the work per thread, which can improve
+instruction-level parallelism.
 
 #### Why coalescing matters here
 If each thread loaded a contiguous segment for itself, global memory access would be strided across threads and
@@ -207,6 +296,12 @@ Brent-Kung is often discussed as an algorithm with fewer operations but more com
 actual performance depends on shared-memory traffic and synchronization, which this codebase makes easy to study
 side-by-side.
 
+**Key characteristics:**
+- **Work**: $$O(N)$$ additions (work-efficient)
+- **Depth**: $$2\log_2(N)$$ parallel steps
+- **Synchronization**: One `__syncthreads()` per iteration
+- **Shared memory**: $$2B$$ elements
+
 ---
 
 ### Brent-Kung scan (coarsened)
@@ -225,9 +320,9 @@ This preserves the expected tree shape and makes the existing Brent-Kung scan co
 
 {% include image.liquid url="/assets/img/posts_images/scan_cuda/brent_kung_coarsened_scan.png" description="Brent-Kung scan with coarsening and padded totals array." %}
 
-After the totals scan, each thread adds `totals[t-1]` to its local C elements to produce the correct block-wide
-prefix order. This is the same “redistribution” idea as in coarsened Kogge-Stone, but the padded 2B array is a
-specific quirk of the Brent-Kung implementation here.
+After the totals scan, each thread adds the scanned total of all previous threads to its local $$C$$ elements to
+produce the correct block-wide prefix order. This is the same “redistribution” idea as in coarsened Kogge-Stone,
+but the padded 2B array is a specific quirk of the Brent-Kung implementation here.
 
 ---
 
@@ -301,8 +396,8 @@ the last lane of each warp writes its total to index `warp`, and in the scan pha
 lane id (0..warp_count-1) maps directly to warp id. Since `warp_count <= 32`, warp 0 has exactly enough lanes.
 
 #### 5) Fewer hierarchical levels
-Because each block processes more elements, the `partialSums` array is smaller and the multi-level scan has fewer
-levels. That reduces total kernel launches and memory traffic.
+Because each block processes more elements, the block-totals buffer (`partialSums` in the code) is smaller and the
+multi-level scan has fewer levels. That reduces total kernel launches and memory traffic.
 
 ---
 
@@ -324,9 +419,20 @@ Both kernels do the same high-level steps:
 
 {% include image.liquid url="/assets/img/posts_images/scan_cuda/single_pass_scan_naive.png" description="Single-pass naive scan with domino propagation." %}
 
-The domino chain uses two arrays:
-- `scan_value`: prefix sums per block
-- `flags`: readiness markers
+The domino chain needs two pieces of global state:
+
+- **Published prefixes**: a per-block slot where block $$i$$ publishes the prefix up to the end of its tile, so
+  block $$i+1$$ can read it.
+- **Readiness markers**: a per-block marker so the successor knows the published prefix is valid and globally
+  visible.
+
+In the code these are `scan_value` (the published prefix values) and `flags` (the readiness markers). The `epoch`
+value is a generation counter: instead of clearing `flags` between invocations, the kernel treats
+`flags[k] == epoch` as “ready for this run”.
+
+One small indexing convenience shows up in the snippet below: the arrays are effectively shifted by one
+(`bid + 1`) so slot 0 can represent the empty prefix (0). Block `bid` publishes into slot `bid+1` and waits on
+slot `bid`.
 
 The publish sequence requires a **global memory fence**:
 
@@ -341,14 +447,20 @@ block i’s write to `scan_value[i+1]` is globally visible before block i+1 obse
 Without the fence, the successor block could read stale data.
 
 **Naive ordering hazard**: these kernels use `blockIdx.x` as the logical block id. If CUDA schedules blocks out of
-order (which is allowed), the domino chain can deadlock. This is why the next variant exists.
+order (which is allowed), the domino chain can deadlock. Concretely, a later block can become resident and spin
+waiting for a predecessor that was never scheduled; if all resident blocks are waiting, no block makes progress.
+This is why the next variant exists.
 
 ---
 
 ### Dynamic block indexing scan
 **Kernel**: `src/single_pass_scan_dynamic_block_index.cu`
 
-This version assigns logical block ids dynamically, using a global counter:
+To make the domino chain follow **actual execution order** (instead of launch order), blocks take a ticket from a
+global counter when they start running. That ticket becomes the block’s logical id in the chain, so a block never
+waits on a predecessor that hasn’t been scheduled yet.
+
+In code, thread 0 does:
 
 ```cpp
 if (threadIdx.x == 0) {
@@ -356,8 +468,9 @@ if (threadIdx.x == 0) {
 }
 ```
 
-Now the domino chain is ordered by **actual block arrival**, not by launch order, so the chain always progresses.
-The rest of the scan logic (local scan, flags, scan_value, threadfence) remains the same.
+Because tickets are handed out in arrival order, the predecessor of ticket $$k$$ (ticket $$k-1$$) must already be
+resident (it had to run to take ticket $$k-1$$), so the wait cannot be on a non-resident block. The rest of the
+logic (published prefixes, readiness flags, and `__threadfence()`) remains the same.
 
 This approach is still a strict chain: every block still waits for its predecessor, but the ordering is now safe.
 
@@ -368,16 +481,26 @@ This approach is still a strict chain: every block still waits for its predecess
 - `src/single_pass_scan_decoupled_lookbacks.cu`
 - `src/single_pass_scan_decoupled_lookbacks_warp_window.cu`
 
-Decoupled lookback removes the strict block-serialization of the domino chain. Instead, each block:
+Decoupled lookback removes the strict block-serialization of the domino chain. Terminology: I’ll call each
+block’s contiguous chunk of the input a **tile**. The algorithm maintains a global per-tile state array (called
+`tile_state` in the code) where each tile publishes information that later tiles can reuse.
 
-1. Publishes its local block sum as a **PARTIAL** value in a tile state array.
-2. Looks back over preceding tiles until it finds an **INCLUSIVE** tile, accumulating partial sums along the way.
-3. Publishes its own **INCLUSIVE** value (prefix + block sum).
+Instead of “wait only for your immediate predecessor”, each tile:
+
+1. Publishes its local tile sum as a **partial** value in the tile-state array.
+2. Looks back over preceding tiles until it finds an **inclusive** tile, accumulating partial sums along the way.
+3. Publishes its own **inclusive** value (prefix + tile sum).
 
 {% include image.liquid url="/assets/img/posts_images/scan_cuda/single_pass_scan_decoupled_lookbacks.png" description="Single-pass scan with decoupled lookbacks." %}
 
 #### Tile state packing
-The tile state stores both a status and a value in a single 64-bit word so updates can be atomic:
+Each tile state stores **(status, value)**. Status is one of:
+
+- **Invalid** (nothing published yet) — `TILE_INVALID` in the code
+- **Partial** (tile sum published; no carry from predecessors yet) — `TILE_PARTIAL` in the code
+- **Inclusive** (full prefix up to the end of the tile published) — `TILE_INCLUSIVE` in the code
+
+The code packs `(status, value)` into a single 64-bit word so updates can be atomic:
 
 ```cpp
 unsigned long long pack_state(unsigned int status, T value) {
@@ -390,8 +513,9 @@ This uses `__float_as_uint` and `__uint_as_float` to preserve the exact 32-bit b
 assumes 32-bit values (`sizeof(T) == sizeof(unsigned int)`), which is enforced by a static_assert. If you want a
 type-safe version for non-float data, you would use a different packing strategy.
 
-The lookback uses `atomicAdd(&tile_state[idx], 0ULL)` as an atomic read. That pattern ensures you see the most
-recent tile update and avoids stale cached values while another block is still publishing.
+The lookback needs an atomic snapshot read of this 64-bit word. The code uses the CUDA idiom
+`atomicAdd(&tile_state[idx], 0ULL)` (atomic add of zero) as an atomic load, which ensures you see the most recent
+tile update while other blocks are publishing.
 
 #### Serial lookback
 Thread 0 walks backward until it sees an inclusive tile:
@@ -442,8 +566,9 @@ because windows do not overlap.
 - Dynamic block indexing still enforces a strict chain (block i waits for block i-1).
 - Decoupled lookback lets blocks make partial progress even if predecessors are not finished, which improves
   parallelism when many blocks are resident.
-- The state footprint differs: decoupled lookback uses a single tile_state array of packed values, while dynamic
-  indexing uses flags + scan_value + blockCounter.
+- **State footprint**: lookback uses one packed per-tile state array (named `tile_state` in the code). The
+  dynamic-index domino uses a published-prefix array + readiness flags + a global ticket counter (named
+  `scan_value`, `flags`, `blockCounter`).
 
 ---
 
@@ -524,6 +649,6 @@ This repository is a compact but deep exploration of GPU scan design:
   sophisticated decoupled lookbacks.
 
 If you are new to GPU scans, start with the simple hierarchical Kogge-Stone and Brent-Kung versions and study how
-`partialSums` enables global correctness. Then move to the coarsened and warp-tiled kernels to see how memory
+the block-totals buffer (`partialSums` in the code) enables global correctness. Then move to the coarsened and warp-tiled kernels to see how memory
 coalescing and warp primitives change the design. Finally, explore single-pass scans to understand how inter-block
 coordination can be done without extra kernel launches.
