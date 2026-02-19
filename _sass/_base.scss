@@ -1246,6 +1246,47 @@ ninja-keys::part(ninja-input-wrapper) {
   background: var(--global-bg-color);
 }
 
+// Subscribe button (blog list + end of posts)
+.subscribe-button,
+.example_a {
+  color: #fff !important;
+  text-transform: none !important;
+  text-decoration: none !important;
+  background: #3f51b5 !important;
+  padding: 12px 32px !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  font-family: inherit !important;
+  letter-spacing: 0.03em !important;
+  border-radius: 50px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(63, 81, 181, 0.25) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+
+  &::before {
+    content: "\f0e0";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 0.85em;
+  }
+
+  &:hover {
+    background: #303f9f !important;
+    box-shadow: 0 4px 16px rgba(63, 81, 181, 0.35) !important;
+    transform: translateY(-2px) !important;
+    letter-spacing: 0.03em !important;
+  }
+
+  &:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 4px rgba(63, 81, 181, 0.25) !important;
+  }
+}
+
 // newsletter
 .newsletter-form-container {
   margin-bottom: 20px;

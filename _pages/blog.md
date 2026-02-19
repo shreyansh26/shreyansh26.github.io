@@ -30,8 +30,8 @@ pagination:
   {% endif %}
 
   <!-- Subscribe button section -->
-  <div class="subscribe-section" style="text-align: center; margin: 15px 0 5px 0;">
-    <button id="openpopup" class="subscribe-button" style="margin: 0 auto; display: block;">Subscribe to my posts!</button>
+  <div class="subscribe-section" style="text-align: center; margin: 20px 0 10px 0;">
+    <button id="openpopup" class="subscribe-button">Subscribe to my posts!</button>
   </div>
 
 {% if site.display_tags or site.display_categories %}
@@ -203,30 +203,6 @@ pagination:
 <script type="text/javascript" src="//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script>
   
 <style>
-  .subscribe-button {
-    color: #fff !important;
-    text-transform: uppercase;
-    text-decoration: none;
-    background: #3f51b5;
-    padding: 4px 8px;
-    font-size: 0.8em;
-    border-radius: 5px;
-    cursor: pointer;
-    display: inline-block;
-    border: none;
-    transition: all 0.4s ease 0s;
-    margin: 0;
-  }
-
-  .subscribe-button:hover {
-    background: #434343;
-    letter-spacing: 1px;
-    -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-    -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-    box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
-    transition: all 0.4s ease 0s;
-  }
-
   /* Fix for tag-category list mobile spacing */
   @media (max-width: 768px) {
     .tag-category-list ul {
