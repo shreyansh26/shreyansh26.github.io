@@ -1,18 +1,22 @@
 ---
 layout: post
 title: "Deep dive into CUDA Scan Kernels: Hierarchical and Single-Pass Variants"
-date: 2026-01-24
+date: 2026-02-19
 author: "Shreyansh Singh"
 description: "A guided tour of hierarchical and single-pass CUDA scan kernels with coarsening and warp-level optimizations."
 thumbnail: /assets/img/posts_images/scan_cuda/hierarchical_scan.png
-tags: cuda gpu scan prefix-sum parallel
+tags: cuda gpu scan prefix-sum mlsys
 categories: ["CUDA", "MLSys"]
 giscus_comments: true
 related_posts: false
-permalink: "post/2026-01-25_cuda-scan-kernels/"
+permalink: "post/2026-02-19_cuda-scan-kernels/"
 featured: false
 toc:
   sidebar: left
+---
+
+*The source code for this post is available on [GitHub](https://github.com/shreyansh26/scan.cu).*
+
 ---
 
 ## Introduction
@@ -29,7 +33,7 @@ There are two broad families here:
 2. **Single-pass scans**: attempt to compute the full array scan in a single kernel launch using inter-block
    coordination (domino propagation or decoupled lookbacks). These are more complex but avoid extra kernel launches.
 
-A CUB baseline in `src/cub_scan.cu` uses `cub::DeviceScan::InclusiveSum` as a reference for performance and
+A CUB baseline in [`src/cub_scan.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/cub_scan.cu) uses `cub::DeviceScan::InclusiveSum` as a reference for performance and
 correctness.
 
 ### Quick CUDA primer (for context)
@@ -41,7 +45,8 @@ If you are new to CUDA, three concepts show up repeatedly in the kernels below:
   for their per-block scan stages.
 - **Synchronization**: `__syncthreads()` synchronizes threads within a block. There is no built-in global
   synchronization across blocks inside a kernel, which is why single-pass scans must use explicit memory
-  protocols to coordinate.
+  protocols to coordinate. `__threadfence()` orders a thread's global memory writes so they are visible to
+  other threads/blocks on the device before it continues.
 
 You’ll also see the term **coalesced memory access**. A global memory access is coalesced when consecutive
 threads in a warp access consecutive addresses, allowing the GPU to serve the warp with fewer memory transactions.
@@ -62,7 +67,7 @@ Hierarchical scan decomposes the full scan into three stages that are easy to pa
 3. **Redistribution (add carry‑in)**: each block adds its carry‑in to every element of its local output, turning a
    block-local prefix into a correct global prefix.
 
-In the source, the “block totals” buffer is called `partialSums`: it is an auxiliary array with **one entry per
+In the source, the "block totals" buffer is called `partialSums`: it is an auxiliary array with **one entry per
 thread block**.
 
 Concretely, after stage 1 each block has computed the right prefix order relative to the start of its own chunk,
@@ -100,7 +105,7 @@ is:
 - **one-block** when $$M \le B$$ (equivalently $$N \le B^2$$; for $$B = 1024$$, about one million elements),
 - **a small recursive hierarchy** when $$M > B$$.
 
-Conceptually, you build a short “pyramid” of group totals:
+Conceptually, you build a short "pyramid" of group totals:
 
 - **Level 0**: per-block totals (length $$M_0 = M$$)
 - **Level 1**: totals of contiguous groups of $$B$$ entries from level 0 (length $$M_1 = \lceil M_0 / B \rceil$$)
@@ -114,7 +119,7 @@ Then you run the same up/down structure across levels:
 3. **Down-sweep**: propagate prefixes back down by adding the scanned prefix of earlier segments (the carry‑in)
    into every element of the lower level.
 
-In `src/hierarchical_kogge_stone.cu`, this logic is packaged as `ScanLevels`: level 0 is the block-totals buffer
+In [`src/hierarchical_kogge_stone.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/hierarchical_kogge_stone.cu), this logic is packaged as `ScanLevels`: level 0 is the block-totals buffer
 (`partialSums` in the code), and higher levels are temporary allocations that shrink by ~1024× each step:
 
 ```cpp
@@ -128,7 +133,7 @@ while (curr_len > BLOCK_SIZE) {
 }
 ```
 
-The scan then follows the “up-sweep / top / down-sweep” pattern literally:
+The scan then follows the "up-sweep / top / down-sweep" pattern literally:
 
 ```cpp
 for (size_t level = 0; level + 1 < levels.data.size(); ++level) {
@@ -166,7 +171,7 @@ This padding is a simple but important trick: it keeps the scan math valid witho
 ---
 
 ### Kogge-Stone scan (simple)
-**Kernel**: `src/hierarchical_kogge_stone.cu`
+**Kernel**: [`src/hierarchical_kogge_stone.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/hierarchical_kogge_stone.cu)
 
 Kogge-Stone is the classic parallel scan. It uses a shared-memory array of size B (one element per thread), and
 performs log2(B) steps. In each step, every thread reads from a neighbor at distance `stride` and updates its own
@@ -204,10 +209,10 @@ This file is the best place to start if you want to understand the baseline hier
 ---
 
 ### Kogge-Stone scan (coarsened)
-**Kernel**: `src/hierarchical_kogge_stone_coarsening.cu`
+**Kernel**: [`src/hierarchical_kogge_stone_coarsening.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/hierarchical_kogge_stone_coarsening.cu)
 
 Coarsening is a standard optimization: instead of one element per thread, each thread processes multiple elements.
-This reduces the number of blocks, which shrinks the block-totals buffer (`partialSums` in the code) and thus
+This reduces the number of blocks, which shrinks the block-totals buffer (`partialSums`) and thus
 reduces the amount of hierarchical work. It also increases the work per thread, which can improve
 instruction-level parallelism.
 
@@ -251,13 +256,13 @@ if (threadIdx.x > 0) {
 ```
 
 In contrast, some single-pass variants that keep the coarsened segment in registers can apply the redistribution
-implicitly at write-out time (see `src/single_pass_scan_naive.cu`). The explicit redistribution loop here is the
+implicitly at write-out time (see [`src/single_pass_scan_naive.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/single_pass_scan_naive.cu)). The explicit redistribution loop here is the
 price paid for the coalesced/shared-transpose layout.
 
 ---
 
 ### Kogge-Stone scan (double buffering)
-**Kernel**: `src/hierarchical_kogge_stone_double_buffering.cu`
+**Kernel**: [`src/hierarchical_kogge_stone_double_buffering.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/hierarchical_kogge_stone_double_buffering.cu)
 
 Double buffering uses two shared-memory arrays. Each stride writes into the output buffer, then swaps input
 and output. That reduces synchronization to one barrier per stride:
@@ -278,7 +283,7 @@ strides (log2(B)). The extra shared-memory traffic is usually offset by fewer sy
 ---
 
 ### Brent-Kung scan (simple)
-**Kernel**: `src/hierarchical_brent_kung.cu`
+**Kernel**: [`src/hierarchical_brent_kung.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/hierarchical_brent_kung.cu)
 
 Brent-Kung trades fewer total operations for a more complex indexing pattern. It scans 2B elements per block by
 assigning two elements per thread and building a balanced tree:
@@ -305,7 +310,7 @@ side-by-side.
 ---
 
 ### Brent-Kung scan (coarsened)
-**Kernel**: `src/hierarchical_brent_kung_coarsening.cu`
+**Kernel**: [`src/hierarchical_brent_kung_coarsening.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/hierarchical_brent_kung_coarsening.cu)
 
 The coarsened Brent-Kung kernel mirrors the Kogge-Stone coarsening idea, but with one extra detail:
 **it uses a 2B shared array for the thread totals.**
@@ -321,13 +326,13 @@ This preserves the expected tree shape and makes the existing Brent-Kung scan co
 {% include image.liquid url="/assets/img/posts_images/scan_cuda/brent_kung_coarsened_scan.png" description="Brent-Kung scan with coarsening and padded totals array." %}
 
 After the totals scan, each thread adds the scanned total of all previous threads to its local $$C$$ elements to
-produce the correct block-wide prefix order. This is the same “redistribution” idea as in coarsened Kogge-Stone,
+produce the correct block-wide prefix order. This is the same "redistribution" idea as in coarsened Kogge-Stone,
 but the padded 2B array is a specific quirk of the Brent-Kung implementation here.
 
 ---
 
 ### Brent-Kung scan (double buffering)
-**Kernel**: `src/hierarchical_brent_kung_double_buffering.cu`
+**Kernel**: [`src/hierarchical_brent_kung_double_buffering.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/hierarchical_brent_kung_double_buffering.cu)
 
 Brent-Kung double buffering is included for completeness, but it is usually not beneficial. The in-place
 Brent-Kung already avoids read-after-write hazards and uses one barrier per stride. The double-buffered version:
@@ -342,8 +347,8 @@ So the overhead outweighs the benefit for Brent-Kung in this codebase.
 
 ### Optimized hierarchical scan (warp primitives + register tiling)
 **Kernels**:
-- `src/hierarchical_warp_tiled_optimized.cu`
-- `src/hierarchical_warp_tiled_coarsening_optimized.cu`
+- [`src/hierarchical_warp_tiled_optimized.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/hierarchical_warp_tiled_optimized.cu)
+- [`src/hierarchical_warp_tiled_coarsening_optimized.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/hierarchical_warp_tiled_coarsening_optimized.cu)
 
 These optimized kernels combine multiple techniques to reduce synchronization and shared-memory traffic.
 
@@ -396,7 +401,7 @@ the last lane of each warp writes its total to index `warp`, and in the scan pha
 lane id (0..warp_count-1) maps directly to warp id. Since `warp_count <= 32`, warp 0 has exactly enough lanes.
 
 #### 5) Fewer hierarchical levels
-Because each block processes more elements, the block-totals buffer (`partialSums` in the code) is smaller and the
+Because each block processes more elements, the block-totals buffer (`partialSums`) is smaller and the
 multi-level scan has fewer levels. That reduces total kernel launches and memory traffic.
 
 ---
@@ -408,8 +413,8 @@ with each other directly, so global ordering must be achieved by careful memory 
 
 ### Naive single-pass scan (domino propagation)
 **Kernels**:
-- `src/single_pass_scan_naive.cu` (register-tile output)
-- `src/single_pass_scan_naive_alternate.cu` (shared-memory tile output)
+- [`src/single_pass_scan_naive.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/single_pass_scan_naive.cu) (register-tile output)
+- [`src/single_pass_scan_naive_alternate.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/single_pass_scan_naive_alternate.cu) (shared-memory tile output)
 
 Both kernels do the same high-level steps:
 
@@ -428,7 +433,7 @@ The domino chain needs two pieces of global state:
 
 In the code these are `scan_value` (the published prefix values) and `flags` (the readiness markers). The `epoch`
 value is a generation counter: instead of clearing `flags` between invocations, the kernel treats
-`flags[k] == epoch` as “ready for this run”.
+`flags[k] == epoch` as "ready for this run".
 
 One small indexing convenience shows up in the snippet below: the arrays are effectively shifted by one
 (`bid + 1`) so slot 0 can represent the empty prefix (0). Block `bid` publishes into slot `bid+1` and waits on
@@ -454,7 +459,7 @@ This is why the next variant exists.
 ---
 
 ### Dynamic block indexing scan
-**Kernel**: `src/single_pass_scan_dynamic_block_index.cu`
+**Kernel**: [`src/single_pass_scan_dynamic_block_index.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/single_pass_scan_dynamic_block_index.cu)
 
 To make the domino chain follow **actual execution order** (instead of launch order), blocks take a ticket from a
 global counter when they start running. That ticket becomes the block’s logical id in the chain, so a block never
@@ -478,14 +483,14 @@ This approach is still a strict chain: every block still waits for its predecess
 
 ### Decoupled lookbacks (single-pass)
 **Kernels**:
-- `src/single_pass_scan_decoupled_lookbacks.cu`
-- `src/single_pass_scan_decoupled_lookbacks_warp_window.cu`
+- [`src/single_pass_scan_decoupled_lookbacks.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/single_pass_scan_decoupled_lookbacks.cu)
+- [`src/single_pass_scan_decoupled_lookbacks_warp_window.cu`](https://github.com/shreyansh26/scan.cu/blob/main/src/single_pass_scan_decoupled_lookbacks_warp_window.cu)
 
 Decoupled lookback removes the strict block-serialization of the domino chain. Terminology: I’ll call each
 block’s contiguous chunk of the input a **tile**. The algorithm maintains a global per-tile state array (called
 `tile_state` in the code) where each tile publishes information that later tiles can reuse.
 
-Instead of “wait only for your immediate predecessor”, each tile:
+Instead of "wait only for your immediate predecessor", each tile:
 
 1. Publishes its local tile sum as a **partial** value in the tile-state array.
 2. Looks back over preceding tiles until it finds an **inclusive** tile, accumulating partial sums along the way.
@@ -573,7 +578,7 @@ because windows do not overlap.
 ---
 
 ## Performance Overview (from the provided benchmarks)
-The repository includes benchmark results in `bench/timing.txt`, generated by running `bench.sh` over all kernels
+The repository includes benchmark results in [`bench/timing.txt`](https://github.com/shreyansh26/scan.cu/blob/main/bench/timing.txt), generated by running [`bench.sh`](https://github.com/shreyansh26/scan.cu/blob/main/bench.sh) over all kernels
 and a set of input sizes. These numbers are **wall-clock kernel times** reported by each binary. Since hardware and
 build settings are not embedded in the file, treat these results as a **relative comparison** for the current
 environment, not as universal performance claims.
@@ -585,7 +590,7 @@ environment, not as universal performance claims.
 
 ### Latency plot (power-of-two sizes)
 The plot below visualizes the **top 3 kernels (by average power-of-two latency) plus CUB** across power-of-two
-input sizes. It is generated from `bench/timing.txt` and saved at `bench/latency_pow2_top3.png`.
+input sizes. It is generated from [`bench/timing.txt`](https://github.com/shreyansh26/scan.cu/blob/main/bench/timing.txt) and saved at [`bench/latency_pow2_top3.png`](https://github.com/shreyansh26/scan.cu/blob/main/bench/latency_pow2_top3.png).
 
 {% include image.liquid url="/assets/img/posts_images/scan_cuda/latency_pow2_top3.png" description="Latency vs N for top 3 kernels + CUB (power-of-two sizes from bench/timing.txt)." %}
 
@@ -607,7 +612,7 @@ differences are tiny, but it’s still useful to see which kernels stay competit
   tiny sizes.
 
 ### Large‑N snapshot (representative sizes)
-Below is a snapshot of representative larger sizes from `bench/timing.txt`. (Lower is better.)
+Below is a snapshot of representative larger sizes from [`bench/timing.txt`](https://github.com/shreyansh26/scan.cu/blob/main/bench/timing.txt). (Lower is better.)
 
 | Kernel (selected) | N = 100,000 (ms) | N = 1,000,000 (ms) | N = 4,194,303 (ms) |
 | --- | --- | --- | --- |
@@ -622,6 +627,7 @@ Below is a snapshot of representative larger sizes from `bench/timing.txt`. (Low
 | Single-pass dynamic block index | 0.029392 | 0.230454 | 0.946202 |
 | Single-pass naive | 0.0302944 | 0.221734 | 0.910448 |
 
+<br>
 ### Takeaways
 - **Warp-tiled hierarchical scans are consistently strong at large N.** They combine coalesced access with warp
   primitives and fewer synchronization points, so they stay competitive as the array grows.
@@ -633,13 +639,12 @@ Below is a snapshot of representative larger sizes from `bench/timing.txt`. (Low
 - **Brent-Kung double buffering does not help** in these measurements, matching the reasoning in the notes: the
   in-place Brent-Kung already avoids the hazards that double buffering tries to fix.
 
-If you want to reproduce or extend these results, `bench.sh` runs all binaries under `bin/` and prints the same
-table format used in `bench/timing.txt`.
+If you want to reproduce or extend these results, [`bench.sh`](https://github.com/shreyansh26/scan.cu/blob/main/bench.sh) runs all binaries under `bin/` and prints the same
+table format used in [`bench/timing.txt`](https://github.com/shreyansh26/scan.cu/blob/main/bench/timing.txt).
 
 ---
 
 ## Conclusion
-This repository is a compact but deep exploration of GPU scan design:
 
 - **Hierarchical scans** provide a clear, scalable baseline with predictable synchronization.
 - **Coarsening and double buffering** highlight memory and synchronization tradeoffs.
@@ -649,6 +654,58 @@ This repository is a compact but deep exploration of GPU scan design:
   sophisticated decoupled lookbacks.
 
 If you are new to GPU scans, start with the simple hierarchical Kogge-Stone and Brent-Kung versions and study how
-the block-totals buffer (`partialSums` in the code) enables global correctness. Then move to the coarsened and warp-tiled kernels to see how memory
+the block-totals buffer enables global correctness. Then move to the coarsened and warp-tiled kernels to see how memory
 coalescing and warp primitives change the design. Finally, explore single-pass scans to understand how inter-block
 coordination can be done without extra kernel launches.
+
+---
+
+&nbsp;
+
+<script type="text/javascript" src="//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script>
+
+<!-- <button style="background-color: #70ab17; color: #1770AB" id="openpopup">Subscribe to my posts!</button> -->
+<div class="button_cont" align="center"><button id="openpopup" class="example_a">Subscribe to my posts!</button></div>
+
+<style>
+    .example_a {
+        color: #fff !important;
+        text-transform: uppercase;
+        text-decoration: none;
+        background: #3f51b5;
+        padding: 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        display: inline-block;
+        border: none;
+        transition: all 0.4s ease 0s;
+    }
+
+    .example_a:hover {
+        background: #434343;
+        letter-spacing: 1px;
+        -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+        -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+        box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+        transition: all 0.4s ease 0s;
+    }
+</style>
+
+
+<script type="text/javascript">
+
+function showMailingPopUp() {
+    window.dojoRequire(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us4.list-manage.com","uuid":"0b10ac14f50d7f4e7d11cf26a","lid":"667a1bb3da","uniqueMethods":true}) })
+
+    document.cookie = "MCPopupClosed=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+}
+
+document.getElementById("openpopup").onclick = function() {showMailingPopUp()};
+
+</script>
+
+&nbsp;  
+
+<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="shreyanshsingh" data-description="Support me on Buy me a coffee!" data-message="" data-color="#FF5F5F" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+Follow me on [Twitter](https://twitter.com/shreyansh_26), [Github](https://github.com/shreyansh26) or connect on [LinkedIn](https://www.linkedin.com/in/shreyansh26/).
