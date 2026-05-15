@@ -4,6 +4,16 @@
     <script type="text/javascript">
       window.MathJax = {
         tex: {
+          inlineMath: [
+            ['$', '$'],
+            ['\\(', '\\)'],
+          ],
+          displayMath: [
+            ['$$', '$$'],
+            ['\\[', '\\]'],
+          ],
+          processEscapes: true,
+          processEnvironments: true,
           tags: 'ams',
         },
       };
