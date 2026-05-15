@@ -2,6 +2,8 @@
 layout: default
 permalink: /post/
 title: Posts
+description: Technical notes, paper summaries, and engineering writeups by Shreyansh Singh.
+thumbnail: /assets/img/social/blog-preview.png
 nav: true
 nav_order: 1
 pagination:
