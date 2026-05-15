@@ -6,23 +6,41 @@
 /* Make ALL entries the same font weight */
 #toc-sidebar .nav li > a {
   font-weight: 500 !important;
-  font-size: 0.7em !important;
+  font-size: 0.8rem !important;
+  line-height: 1.35;
   display: block;
+  padding-top: 0.16rem;
+  padding-bottom: 0.16rem;
+  color: var(--global-text-color);
+  border-left: 2px solid transparent;
+}
+
+#toc-sidebar .nav li > a:hover,
+#toc-sidebar .nav li > a:focus {
+  color: var(--global-theme-color);
+  border-left-color: var(--global-theme-color);
+  text-decoration: none;
+}
+
+#toc-sidebar .nav li > a.active {
+  color: var(--global-theme-color);
+  border-left-color: var(--global-theme-color);
+  font-weight: 700 !important;
 }
 
 /* First level entries */
 #toc-sidebar .nav > li > a {
-  padding-left: 10px;
+  padding-left: 12px;
 }
 
 /* Second level entries (h2 under h1) */
 #toc-sidebar .nav .nav > li > a {
-  padding-left: 25px;
+  padding-left: 28px;
 }
 
 /* Third level entries (h3 under h2) */
 #toc-sidebar .nav .nav .nav > li > a {
-  padding-left: 40px;
+  padding-left: 44px;
 }
 
 /* Make sure all nested levels are visible */

@@ -876,13 +876,19 @@ figure.highlight {
 pre {
   color: var(--global-theme-color);
   background-color: var(--global-code-bg-color);
-  border-radius: 6px;
-  padding: 6px 12px;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 0.45rem;
+  line-height: 1.55;
+  overflow-x: auto;
+  padding: 0.9rem 1rem;
+  -webkit-overflow-scrolling: touch;
 
   pre,
   code {
     background-color: transparent;
+    border: 0;
     border-radius: 0;
+    line-height: inherit;
     margin-bottom: 0;
     padding: 0;
   }
@@ -891,9 +897,9 @@ pre {
 code {
   color: var(--global-theme-color);
   background-color: var(--global-code-bg-color);
-  border-radius: 3px;
-  padding: 3px 3px;
+  border-radius: 0.25rem;
   font-family: "Source Code Pro", monospace;
+  padding: 0.13rem 0.28rem;
 }
 
 blockquote {
@@ -940,8 +946,93 @@ $post-image-max-width-toc: 900px;
   .post-content {
     font-size: 1.2rem;
 
+    #markdown-content {
+      > p,
+      > div > p {
+        margin-bottom: 1.15rem;
+      }
+
+      > ul,
+      > ol,
+      > dl,
+      > div > ul,
+      > div > ol,
+      > div > dl {
+        margin-top: 0.35rem;
+        margin-bottom: 1.35rem;
+      }
+
+      > ul,
+      > ol,
+      > div > ul,
+      > div > ol {
+        padding-left: 1.65rem;
+      }
+
+      > ul li,
+      > ol li,
+      > div > ul li,
+      > div > ol li {
+        margin-bottom: 0.35rem;
+      }
+
+      > h2,
+      > div > h2 {
+        margin-top: 2.6rem;
+        margin-bottom: 1rem;
+      }
+
+      > h3,
+      > div > h3 {
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+      }
+
+      > h4,
+      > h5,
+      > h6,
+      > div > h4,
+      > div > h5,
+      > div > h6 {
+        margin-top: 1.6rem;
+        margin-bottom: 0.65rem;
+      }
+
+      > blockquote,
+      > div > blockquote {
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      > figure.highlight,
+      > div > figure.highlight,
+      > .highlighter-rouge,
+      > div > .highlighter-rouge,
+      > pre,
+      > div > pre {
+        margin-top: 1.35rem;
+        margin-bottom: 1.6rem;
+      }
+
+      > table,
+      > div > table,
+      > .table-responsive,
+      > div > .table-responsive {
+        margin-top: 1.25rem;
+        margin-bottom: 1.5rem;
+      }
+
+      > hr,
+      > div > hr {
+        margin-top: 1.8rem;
+        margin-bottom: 2rem;
+      }
+    }
+
     #markdown-content figure:not(.highlight) {
       max-width: $post-image-max-width;
+      margin-top: 1.8rem;
+      margin-bottom: 1.8rem;
       margin-left: auto;
       margin-right: auto;
     }
@@ -1053,15 +1144,15 @@ progress::-moz-progress-bar {
 
   .copy {
     background: var(--global-card-bg-color);
-    border-color: var(--global-bg-color);
-    border-radius: 0.3rem;
-    border-style: none;
+    border: 1px solid var(--global-divider-color);
+    border-radius: 0.35rem;
     color: var(--global-text-color);
-    font-size: medium;
+    font-size: 0.85rem;
     opacity: 0;
+    padding: 0.2rem 0.45rem;
     position: absolute;
-    right: 0.2rem;
-    top: 0.2rem;
+    right: 0.4rem;
+    top: 0.4rem;
   }
 
   &:active .copy,

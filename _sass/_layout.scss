@@ -33,6 +33,19 @@ body.sticky-bottom-footer {
 
 // Fixed-width sidebar for TOC layout on large screens.
 $toc-sidebar-width: 300px;
+@media (max-width: 767.98px) {
+  .toc-layout {
+    .toc-sidebar {
+      display: none;
+    }
+
+    .toc-content {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+}
+
 @media (min-width: 992px) {
   .toc-layout {
     .toc-sidebar {
