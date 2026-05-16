@@ -55,6 +55,8 @@ _styles: |
   .canon-post .canon-metric,
   .canon-post .canon-lab-card,
   .canon-post .canon-placement {
+    box-sizing: border-box;
+    min-width: 0;
     border: 1px solid var(--canon-line);
     border-radius: 0.5rem;
     background: rgba(255, 250, 240, 0.88);
@@ -217,6 +219,69 @@ _styles: |
 
   .canon-post .image br {
     display: none;
+  }
+
+  @media (max-width: 767.98px) {
+    .canon-post .canon-hero {
+      padding: 0.95rem;
+    }
+
+    .canon-post .canon-metric-strip,
+    .canon-post .canon-lab-band,
+    .canon-post .canon-placement-grid {
+      gap: 0.65rem;
+      margin-top: 0.9rem;
+    }
+
+    .canon-post .canon-metric,
+    .canon-post .canon-placement,
+    .canon-post .canon-lab-card {
+      padding: 0.85rem;
+      width: 100%;
+    }
+
+    .canon-post .canon-metric b {
+      font-size: 1.15rem;
+    }
+
+    .canon-post .canon-metric span,
+    .canon-post .canon-lab-card p,
+    .canon-post .canon-placement span {
+      font-size: 0.88rem;
+      line-height: 1.38;
+    }
+
+    .canon-post .canon-lab-title {
+      font-size: 0.98rem;
+    }
+
+    .canon-post .canon-control {
+      gap: 0.35rem;
+      margin-top: 0.5rem;
+      font-size: 0.72rem;
+    }
+
+    .canon-post input[type="range"] {
+      min-height: 1.8rem;
+    }
+
+    .canon-post .canon-readout {
+      gap: 0.45rem;
+      margin-top: 0.65rem;
+    }
+
+    .canon-post .canon-readout div {
+      padding: 0.55rem;
+    }
+
+    .canon-post .canon-readout span {
+      font-size: 1rem;
+    }
+
+    .canon-post .canon-equation {
+      padding: 0.6rem;
+      font-size: 0.74rem;
+    }
   }
 
   @media (min-width: 768px) {
