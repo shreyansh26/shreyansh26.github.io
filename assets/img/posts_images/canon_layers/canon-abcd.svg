@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
+  <title id="title">Canon A B C D insertion points</title>
+  <desc id="desc">A Transformer block with Canon-A before attention, Canon-B on projected QKV, Canon-C before the MLP, and Canon-D inside the MLP.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5a4b32"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#2b2015" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <rect width="1400" height="900" fill="#fbf7ee"/>
+  <text x="74" y="88" fill="#15120d" font-family="Georgia, serif" font-size="52" font-weight="700">Canon-ABCD in a pre-norm Transformer block</text>
+  <text x="78" y="135" fill="#665d4d" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24">same short causal mixer, four different internal representations</text>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" text-anchor="middle">
+    <g transform="translate(72 198)" filter="url(#shadow)">
+      <rect width="1248" height="286" rx="18" fill="#fffaf0" stroke="#d0ba94" stroke-width="2"/>
+    </g>
+    <g transform="translate(72 548)" filter="url(#shadow)">
+      <rect width="1248" height="254" rx="18" fill="#fffaf0" stroke="#d0ba94" stroke-width="2"/>
+    </g>
+
+    <text x="124" y="244" text-anchor="start" fill="#702611" font-size="26" font-weight="700">Attention branch</text>
+    <text x="124" y="594" text-anchor="start" fill="#702611" font-size="26" font-weight="700">MLP branch</text>
+
+    <g font-size="21">
+      <rect x="124" y="316" width="112" height="64" rx="9" fill="#15120d"/>
+      <text x="180" y="356" fill="#fff4df">x</text>
+
+      <rect x="290" y="306" width="152" height="84" rx="9" fill="#fffaf0" stroke="#d0ba94" stroke-width="2"/>
+      <text x="366" y="356" fill="#15120d">RMSNorm</text>
+
+      <rect x="496" y="306" width="162" height="84" rx="9" fill="#f2d9bd" stroke="#9b3d20" stroke-width="2"/>
+      <text x="577" y="341" fill="#702611" font-weight="700">Canon-A</text>
+      <text x="577" y="368" fill="#702611" font-size="17">before attention</text>
+
+      <rect x="712" y="306" width="152" height="84" rx="9" fill="#fffaf0" stroke="#d0ba94" stroke-width="2"/>
+      <text x="788" y="341" fill="#15120d">Q / K / V</text>
+      <text x="788" y="368" fill="#665d4d" font-size="17">project</text>
+
+      <rect x="918" y="306" width="184" height="84" rx="9" fill="#f2d9bd" stroke="#9b3d20" stroke-width="2"/>
+      <text x="1010" y="341" fill="#702611" font-weight="700">Canon-B</text>
+      <text x="1010" y="368" fill="#702611" font-size="17">on concat QKV</text>
+
+      <rect x="1156" y="306" width="116" height="84" rx="9" fill="#fffaf0" stroke="#d0ba94" stroke-width="2"/>
+      <text x="1214" y="341" fill="#15120d">Attn</text>
+      <text x="1214" y="368" fill="#665d4d" font-size="17">+ O proj</text>
+    </g>
+
+    <g font-size="21">
+      <rect x="124" y="642" width="112" height="64" rx="9" fill="#15120d"/>
+      <text x="180" y="682" fill="#fff4df">x1</text>
+
+      <rect x="290" y="632" width="152" height="84" rx="9" fill="#fffaf0" stroke="#d0ba94" stroke-width="2"/>
+      <text x="366" y="682" fill="#15120d">RMSNorm</text>
+
+      <rect x="496" y="632" width="162" height="84" rx="9" fill="#f2d9bd" stroke="#9b3d20" stroke-width="2"/>
+      <text x="577" y="667" fill="#702611" font-weight="700">Canon-C</text>
+      <text x="577" y="694" fill="#702611" font-size="17">before MLP</text>
+
+      <rect x="712" y="632" width="162" height="84" rx="9" fill="#fffaf0" stroke="#d0ba94" stroke-width="2"/>
+      <text x="793" y="667" fill="#15120d">gate / up</text>
+      <text x="793" y="694" fill="#665d4d" font-size="17">project</text>
+
+      <rect x="928" y="632" width="184" height="84" rx="9" fill="#f2d9bd" stroke="#9b3d20" stroke-width="2"/>
+      <text x="1020" y="667" fill="#702611" font-weight="700">Canon-D</text>
+      <text x="1020" y="694" fill="#702611" font-size="17">before activation</text>
+
+      <rect x="1166" y="632" width="116" height="84" rx="9" fill="#fffaf0" stroke="#d0ba94" stroke-width="2"/>
+      <text x="1224" y="667" fill="#15120d">down</text>
+      <text x="1224" y="694" fill="#665d4d" font-size="17">project</text>
+    </g>
+  </g>
+
+  <g fill="none" stroke="#5a4b32" stroke-width="4" marker-end="url(#arrow)">
+    <path d="M236 348H290"/>
+    <path d="M442 348H496"/>
+    <path d="M658 348H712"/>
+    <path d="M864 348H918"/>
+    <path d="M1102 348H1156"/>
+    <path d="M236 674H290"/>
+    <path d="M442 674H496"/>
+    <path d="M658 674H712"/>
+    <path d="M874 674H928"/>
+    <path d="M1112 674H1166"/>
+    <path d="M1214 390C1214 456 1140 496 982 520C812 546 412 532 236 632"/>
+  </g>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" fill="#15120d">
+    <rect x="155" y="421" width="340" height="42" rx="21" fill="#15120d"/>
+    <text x="180" y="449" fill="#fff4df">attention output is added to x</text>
+
+    <rect x="155" y="742" width="326" height="42" rx="21" fill="#15120d"/>
+    <text x="180" y="770" fill="#fff4df">MLP output is added to x1</text>
+
+    <rect x="770" y="421" width="390" height="42" rx="21" fill="#fffaf0" stroke="#d0ba94"/>
+    <text x="794" y="449" fill="#702611">Canon-B width = q_dim + k_dim + v_dim</text>
+
+    <rect x="760" y="742" width="418" height="42" rx="21" fill="#fffaf0" stroke="#d0ba94"/>
+    <text x="784" y="770" fill="#702611">Canon-D sees concatenated gate/up states</text>
+  </g>
+</svg>
