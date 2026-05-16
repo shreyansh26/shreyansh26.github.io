@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Depthwise Canon versus full convolution</title>
+  <desc id="desc">Depthwise Canon uses one small causal filter per channel, while full convolution mixes every input channel into every output channel.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9b3d20"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#2b2015" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <rect width="1400" height="760" fill="#f7f0e3"/>
+  <text x="78" y="92" fill="#15120d" font-family="Georgia, serif" font-size="52" font-weight="700">Depthwise Canon vs full local convolution</text>
+  <text x="82" y="138" fill="#665d4d" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24">Canon keeps local token mixing separate from hidden-channel mixing</text>
+
+  <g transform="translate(82 188)" filter="url(#shadow)">
+    <rect width="588" height="440" rx="16" fill="#fffaf0" stroke="#d0ba94" stroke-width="2"/>
+  </g>
+  <g transform="translate(730 188)" filter="url(#shadow)">
+    <rect width="588" height="440" rx="16" fill="#fffaf0" stroke="#d0ba94" stroke-width="2"/>
+  </g>
+
+  <g transform="translate(82 188)">
+    <text x="38" y="56" fill="#15120d" font-family="Georgia, serif" font-size="34" font-weight="700">Depthwise causal Conv1D</text>
+    <text x="40" y="92" fill="#665d4d" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="21">groups = D</text>
+    <text x="40" y="121" fill="#665d4d" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="19">each channel has its own short filter</text>
+
+    <g transform="translate(78 166)" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" text-anchor="middle">
+      <text x="70" y="-20" fill="#665d4d">input channels</text>
+      <text x="370" y="-20" fill="#665d4d">output channels</text>
+      <g fill="#f2d9bd" stroke="#9b3d20" stroke-width="2">
+        <rect x="0" y="0" width="124" height="48" rx="7"/>
+        <rect x="0" y="82" width="124" height="48" rx="7"/>
+        <rect x="0" y="164" width="124" height="48" rx="7"/>
+        <rect x="300" y="0" width="124" height="48" rx="7"/>
+        <rect x="300" y="82" width="124" height="48" rx="7"/>
+        <rect x="300" y="164" width="124" height="48" rx="7"/>
+      </g>
+      <text x="62" y="31" fill="#15120d">channel 1</text>
+      <text x="62" y="113" fill="#15120d">channel 2</text>
+      <text x="62" y="195" fill="#15120d">channel D</text>
+      <text x="362" y="31" fill="#15120d">channel 1</text>
+      <text x="362" y="113" fill="#15120d">channel 2</text>
+      <text x="362" y="195" fill="#15120d">channel D</text>
+      <g stroke="#9b3d20" stroke-width="4" marker-end="url(#arrow)">
+        <path d="M128 24H294"/>
+        <path d="M128 106H294"/>
+        <path d="M128 188H294"/>
+      </g>
+      <g fill="#fffaf0" stroke="#d0ba94">
+        <rect x="186" y="4" width="58" height="38" rx="19"/>
+        <rect x="186" y="86" width="58" height="38" rx="19"/>
+        <rect x="186" y="168" width="58" height="38" rx="19"/>
+      </g>
+      <text x="215" y="30" fill="#702611">K</text>
+      <text x="215" y="112" fill="#702611">K</text>
+      <text x="215" y="194" fill="#702611">K</text>
+    </g>
+
+    <g transform="translate(40 386)">
+      <rect width="508" height="48" rx="10" fill="#15120d"/>
+      <text x="24" y="31" fill="#fff4df" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="23">params = D*K</text>
+      <text x="286" y="31" fill="#cdbf9f" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20">4096*4 = 16K</text>
+    </g>
+  </g>
+
+  <g transform="translate(730 188)">
+    <text x="38" y="56" fill="#15120d" font-family="Georgia, serif" font-size="34" font-weight="700">Full local convolution</text>
+    <text x="40" y="92" fill="#665d4d" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="21">groups = 1</text>
+    <text x="40" y="121" fill="#665d4d" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="19">every output can read every input channel</text>
+
+    <g transform="translate(80 168)" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" text-anchor="middle">
+      <text x="70" y="-22" fill="#665d4d">input channels</text>
+      <text x="394" y="-22" fill="#665d4d">output channels</text>
+      <g fill="#f2d9bd" stroke="#9b3d20" stroke-width="2">
+        <rect x="0" y="0" width="124" height="48" rx="7"/>
+        <rect x="0" y="82" width="124" height="48" rx="7"/>
+        <rect x="0" y="164" width="124" height="48" rx="7"/>
+        <rect x="324" y="42" width="124" height="48" rx="7"/>
+        <rect x="324" y="124" width="124" height="48" rx="7"/>
+      </g>
+      <text x="62" y="31" fill="#15120d">input 1</text>
+      <text x="62" y="113" fill="#15120d">input 2</text>
+      <text x="62" y="195" fill="#15120d">input D</text>
+      <text x="386" y="73" fill="#15120d">output 1</text>
+      <text x="386" y="155" fill="#15120d">output D</text>
+      <g stroke="#9b3d20" stroke-width="3" opacity="0.78" marker-end="url(#arrow)">
+        <path d="M128 24L318 66"/>
+        <path d="M128 106L318 66"/>
+        <path d="M128 188L318 66"/>
+        <path d="M128 24L318 148"/>
+        <path d="M128 106L318 148"/>
+        <path d="M128 188L318 148"/>
+      </g>
+    </g>
+
+    <g transform="translate(40 386)">
+      <rect width="508" height="48" rx="10" fill="#15120d"/>
+      <text x="24" y="31" fill="#fff4df" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="23">params = D*D*K</text>
+      <text x="302" y="31" fill="#cdbf9f" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20">4096^2*4 = 67M</text>
+    </g>
+  </g>
+</svg>
