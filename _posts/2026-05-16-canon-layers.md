@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "Canon Layers"
+title: "Paper Summary #16 - Canon Layers"
 date: 2026-05-16
 author: "Shreyansh Singh"
 description: "A deep dive into Canon Layers: why sequence models need cheap horizontal token flow, how residual causal depthwise convolution implements it, and where Canon-A/B/C/D fit inside Transformer and linear-model blocks."
 thumbnail: /assets/img/posts_images/canon_layers/canon-local-flow.svg
-tags: llms transformers canon-layers
+tags: llms transformers canon-layers paper-summaries
 categories: ["LLMs"]
 giscus_comments: true
 related_posts: false
@@ -307,6 +307,11 @@ _styles: |
 ---
 
 <div class="canon-post" markdown="1">
+
+**Paper:** [Physics of Language Models: Part 4.1, Architecture Design and the Magic of Canon Layers](https://arxiv.org/abs/2512.17351)  
+**Official implementation:** [facebookresearch/PhysicsLM4](https://github.com/facebookresearch/PhysicsLM4)
+
+----
 
 <section class="canon-hero" data-toc-skip>
   <div class="canon-metric-strip" aria-label="Key numbers">

@@ -187,7 +187,7 @@ pagination:
 </div>
 
   <div class="col-sm-3">
-    <img class="card-img" src="{{ list_image | absolute_url }}" style="width: 100%; height: auto; object-fit: contain;" alt="{{ post.title }}">
+    <img class="card-img" src="{{ list_image | relative_url }}" style="width: 100%; height: auto; object-fit: contain;" alt="{{ post.title }}">
   </div>
 </div>
 {% endif %}

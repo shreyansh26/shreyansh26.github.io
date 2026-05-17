@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "Hyper-Connections and mHC"
+title: "Paper Summary #15 - Hyper-Connections and mHC"
 date: 2026-05-15
 author: "Shreyansh Singh"
 description: "From residual-stream basics to manifold-constrained mixing: why widening the residual path helps, why unconstrained products destabilize depth, and how Sinkhorn-Knopp turns HC into conservative feature routing."
 thumbnail: /assets/img/posts_images/hyper_connections_mhc/fig-01.jpeg
-tags: llms transformers residual-connections hyper-connections mhc
+tags: llms transformers residual-connections hyper-connections mhc paper-summaries
 categories: ["LLMs", "MLSys"]
 giscus_comments: true
 related_posts: false
@@ -214,6 +214,10 @@ _styles: |
 ---
 
 <div class="hyper-mhc-post" markdown="1">
+
+**Papers:** [Hyper-Connections](https://arxiv.org/abs/2409.19606) and [mHC: Manifold-Constrained Hyper-Connections](https://arxiv.org/abs/2512.24880)  
+
+----
 
 <section class="mhc-hero" data-toc-skip>
   <div class="mhc-metric-strip" aria-label="Key numbers">
