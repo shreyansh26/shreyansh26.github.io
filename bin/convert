@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Shim to avoid ImageMagick v7 deprecation warning breaking jekyll-imagemagick.
+exec magick "$@"
