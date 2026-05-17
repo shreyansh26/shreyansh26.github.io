@@ -371,7 +371,7 @@ That path is not meant to replace attention. It handles a different job.
 
 The mechanism is a residual causal depthwise convolution over the sequence axis. It is local, cheap, and easy to insert into existing Transformer, linear-attention, and SSM-style blocks.
 
-## 1. The missing path in a standard Transformer
+## The missing path in a standard Transformer
 
 A pre-norm Transformer block usually has:
 
@@ -410,7 +410,7 @@ That is why the paper describes Canon as horizontal information flow. The ordina
 
 {% include image.liquid url="/assets/img/posts_images/canon_layers/canon-local-flow.svg" description="Canon as local horizontal residual flow: the current token receives a small learned mixture of nearby causal states." %}
 
-## 2. Associative recall shows the problem
+## Associative recall shows the problem
 
 Consider the causal sequence:
 
@@ -428,7 +428,7 @@ The catch is causal masking. The first `[A]` cannot see its future neighbor `[B]
 
 Canon makes that first local enrichment cheap.
 
-## 3. The Canon operator
+## The Canon operator
 
 Let a sequence of hidden states be:
 
@@ -477,7 +477,7 @@ with $x_{b,t-r,c}=0$ when $t-r<0$.
 
 The key word is **depthwise**. Channel $c$ reads only channel $c$ over nearby positions. Canon does not perform hidden-dimension mixing; the projections and MLP still own that job.
 
-## 4. Why the residual matters
+## Why the residual matters
 
 Without the residual path:
 
@@ -495,7 +495,7 @@ The residual version is easier to insert because it starts as a local perturbati
 
 The Canon paper's ablations report that residual Canon is materially more stable and efficient than non-residual variants. The implementation also exposes `canon_residual` as a configuration flag, with the released LlamaCanon path defaulting to residual behavior.
 
-## 5. Canon is not local attention
+## Canon is not local attention
 
 Local attention computes content-dependent weights:
 
@@ -534,7 +534,7 @@ The distinction matters:
 <br>
 Canon is closer to a short learned transport operator than to a retrieval mechanism.
 
-## 6. Where Canon goes in a Transformer block
+## Where Canon goes in a Transformer block
 
 The paper studies four insertion points. For hidden width $d$, Canon-ABCD means:
 
@@ -638,7 +638,7 @@ $$
 m=2\cdot\frac{8}{3}d=\frac{16}{3}d.
 $$
 
-## 7. Canon-ABCD pseudocode
+## Canon-ABCD pseudocode
 
 The same residual local mixer appears at different internal representations:
 
@@ -695,7 +695,7 @@ def llama_block_with_canon(x, mask=None, cache=None):
 
 Partial variants such as Canon-AC, Canon-ACD, or Canon-ABC are also meaningful. The paper's ablations find that the benefits are cumulative, and that Canon-ACD can help even without modifying the attention projections.
 
-## 8. Tensor shapes for the core mixer
+## Tensor shapes for the core mixer
 
 The minimal PyTorch version for a `[B,T,D]` tensor is:
 
@@ -754,7 +754,7 @@ $$
 y_{b,t,c}=x_{b,t,c}+\operatorname{mixed}_{b,t,c}.
 $$
 
-## 9. Why `groups=channels` matters
+## Why `groups=channels` matters
 
 With depthwise convolution:
 
@@ -804,7 +804,7 @@ That gap is the reason Canon isolates local sequence transport from channel mixi
 
 {% include image.liquid url="/assets/img/posts_images/canon_layers/depthwise-vs-full-conv.svg" description="Depthwise Canon uses one short causal filter per channel. A full local convolution would mix every channel into every output channel." %}
 
-## 10. Complexity and runtime
+## Complexity and runtime
 
 For batch $B$, sequence length $T$, hidden width $D$, and small kernel $K$:
 
@@ -832,7 +832,7 @@ $$
 \text{cache shape}=[B,D,K].
 $$
 
-## 11. The synthetic playground
+## The synthetic playground
 
 The paper argues that academic-scale real-data pretraining can be too noisy for architecture science. Perplexity mixes many skills together; benchmark swings can hide whether an architecture improved reasoning, knowledge storage, local composition, or something else.
 
@@ -880,7 +880,7 @@ Mano uses modular arithmetic expressions. The model must retrieve learned operat
 
 Lano uses CFG-like sequences with local ambiguity. Correct prediction can require maintaining recursive global structure rather than memorizing nearby tokens.
 
-## 12. What the results imply
+## What the results imply
 
 For Transformer-style models, the Part 4.1 paper reports that Canon-ABCD improves reasoning depth by roughly $2$-$4\times$ in the controlled setup, reasoning breadth by about $30\%$, knowledge manipulation length by about $30\%$, and knowledge capacity in limited-exposure factual-storage regimes.
 
@@ -896,7 +896,7 @@ $$
 
 The paper also studies partial RoPE. With Canon present, reduced-RoPE variants can work well, which matters because heavy RoPE usage can hurt length generalization.
 
-## 13. Linear models and SSMs
+## Linear models and SSMs
 
 The paper compares Transformers, GLA, Mamba2, and GDN under the same synthetic tasks. A useful takeaway is that local convolution-like components inside some linear/SSM architectures already explain a lot of their behavior.
 
@@ -910,7 +910,7 @@ After adding Canon broadly, linear models still tend to lag full-attention Trans
 
 The Part 4.2 code release extends the story to real-world pretraining recipes and released model families, including LlamaCanon, GLA, GDN, and Mamba2 variants.
 
-## 14. Canon versus related mechanisms
+## Canon versus related mechanisms
 
 ### Primer
 
@@ -972,7 +972,7 @@ $$
 \text{learned channelwise local residual convolution}.
 $$
 
-## 15. Implementation details from LlamaCanon
+## Implementation details from LlamaCanon
 
 The released LlamaCanon helper uses a `ShortConvolution` module:
 
@@ -1010,7 +1010,7 @@ The code exposes:
 
 For packed or padded batches, Canon must respect the same valid-token mask as attention. Otherwise, a causal convolution can propagate padding artifacts into valid positions.
 
-## 16. Practical choices
+## Practical choices
 
 ### Initialization
 
@@ -1047,7 +1047,7 @@ Right padding would either shift outputs incorrectly or leak future information.
 
 `torch.nn.Conv1d` is the generic API. It is not automatically the optimized Dao-AILab `causal-conv1d` path. The implementation must call that package explicitly, as LlamaCanon's helper does.
 
-## 17. Open engineering questions
+## Open engineering questions
 
 ### Runtime overhead
 
@@ -1075,7 +1075,7 @@ Canon-D inside a mixture-of-experts MLP is awkward because neighboring tokens ma
 
 Canon improves local flow. It does not remove the hard problem of preserving high-fidelity information through compressed recurrent state or across very long contexts. The paper's linear-model results still suggest that full attention remains stronger for some deep in-context reasoning tasks.
 
-## 18. Summary
+## Summary
 
 Canon Layers are lightweight residual causal convolutions over neighboring token representations:
 

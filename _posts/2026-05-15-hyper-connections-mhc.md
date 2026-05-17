@@ -256,7 +256,7 @@ _styles: |
 
 Hyper-Connections (HC) generalize the residual stream into multiple learned streams. Manifold-Constrained Hyper-Connections (mHC) keep that extra routing capacity while constraining the residual mixing matrices so deep products remain stable.
 
-## 1. The baseline: what residual connections are really buying us
+## The baseline: what residual connections are really buying us
 
 A standard residual layer is:
 
@@ -291,7 +291,7 @@ The classical residual connection is stable, but rigid. Every layer receives exa
 
 {% include image.liquid url="/assets/img/posts_images/hyper_connections_mhc/fig-01.jpeg" description="Hyper-Connections overview. Source: <a href='https://www.youtube.com/watch?v=jYn_1PpRzxI'>How mHC Reinvents Residual Connections</a>." %}
 
-## 2. The problem HC was trying to solve
+## The problem HC was trying to solve
 
 Residual variants such as Pre-Norm and Post-Norm make a trade-off:
 
@@ -369,7 +369,7 @@ def hyper_connection_layer(x, layer_fn, h_pre, h_post, h_res):
 
 {% include image.liquid url="/assets/img/posts_images/hyper_connections_mhc/fig-02.jpeg" description="HC with dynamic mappings. Source: <a href='https://www.youtube.com/watch?v=jYn_1PpRzxI'>How mHC Reinvents Residual Connections</a>." %}
 
-## 3. Original HC notation: depth and width connections
+## Original HC notation: depth and width connections
 
 The original Hyper-Connections paper writes the connection matrix as:
 
@@ -449,7 +449,7 @@ $$
 
 The small learned gates $s_\alpha,s_\beta$ keep the dynamic part small at initialization. In the original paper, dynamic HC with expansion $n=4$ was especially useful in language-model pretraining and achieved much faster convergence in the OLMoE setting.
 
-## 4. Why HC can improve models
+## Why HC can improve models
 
 HC increases macro-architectural flexibility without making attention or MLP blocks wider.
 
@@ -469,7 +469,7 @@ Special cases:
 
 This is why the HC paper argues that Hyper-Connections can learn mixtures of Pre-Norm-like, Post-Norm-like, sequential, and parallel wiring.
 
-## 5. The instability: products of residual mixing matrices
+## The instability: products of residual mixing matrices
 
 The problem appears when we stack many HC layers. Expanding the single-layer update over depth gives:
 
@@ -558,7 +558,7 @@ DeepSeek reports that HC can hit Amax gain values near $3000$ in 27B-scale exper
 
 {% include image.liquid url="/assets/img/posts_images/hyper_connections_mhc/fig-08.jpeg" description="HC gain variation 4. Source: <a href='https://www.youtube.com/watch?v=jYn_1PpRzxI'>How mHC Reinvents Residual Connections</a>." %}
 
-## 6. mHC's core fix: constrain residual mixing to the Birkhoff polytope
+## mHC's core fix: constrain residual mixing to the Birkhoff polytope
 
 mHC keeps the useful part of HC: multiple residual streams and learned stream mixing.
 
@@ -607,17 +607,17 @@ is doubly stochastic. It mixes the two streams, but it cannot create or delete a
 
 {% include image.liquid url="/assets/img/posts_images/hyper_connections_mhc/fig-09.jpeg" description="mHC solution. Source: <a href='https://www.youtube.com/watch?v=jYn_1PpRzxI'>How mHC Reinvents Residual Connections</a>." %}
 
-## 7. Why doubly stochastic matrices stabilize depth
+## Why doubly stochastic matrices stabilize depth
 
 There are three important properties.
 
-### 7.1 They preserve the all-ones direction
+### They preserve the all-ones direction
 
 If $H\mathbf{1}=\mathbf{1}$, each row sums to $1$. If $\mathbf{1}^\top H=\mathbf{1}^\top$, each column sums to $1$.
 
 So $H$ acts like a conservative mixing operator over streams. It can redistribute signal among streams, but it cannot globally scale the stream average up or down.
 
-### 7.2 They are non-expansive in spectral norm
+### They are non-expansive in spectral norm
 
 For a non-negative doubly stochastic matrix:
 
@@ -646,7 +646,7 @@ $$
 
 This directly attacks gradient explosion through $\mathcal{H}^{\mathrm{res}}$.
 
-### 7.3 They are closed under multiplication
+### They are closed under multiplication
 
 If $A$ and $B$ are doubly stochastic, then $AB$ is also doubly stochastic:
 
@@ -682,7 +682,7 @@ $$
 
 So mHC residual mixing is a soft mixture of stream permutations. It can route and combine streams, but within a conservative envelope.
 
-## 8. How mHC constructs the constrained maps
+## How mHC constructs the constrained maps
 
 mHC first computes unconstrained pre-activations from the flattened $n$-stream state:
 
@@ -742,7 +742,7 @@ Two details matter:
 
 {% include image.liquid url="/assets/img/posts_images/hyper_connections_mhc/fig-13.jpeg" description="mHC parameterization adjustments. Source: <a href='https://www.youtube.com/watch?v=jYn_1PpRzxI'>How mHC Reinvents Residual Connections</a>." %}
 
-## 9. Sinkhorn-Knopp: projecting to a doubly stochastic matrix
+## Sinkhorn-Knopp: projecting to a doubly stochastic matrix
 
 Given an unconstrained matrix $\widetilde{H}$, mHC first makes it positive:
 
@@ -810,7 +810,7 @@ $$
 
 Because finite iterations are approximate, mHC does not produce a mathematically exact doubly stochastic matrix in practice. But the paper reports that the composite Amax gain stays bounded around $1.6$, compared with nearly $3000$ for vanilla HC.
 
-## 10. The full mHC update
+## The full mHC update
 
 Once the maps are constrained, the layer update keeps the HC form:
 
@@ -862,7 +862,7 @@ That is the core idea:
 
 > HC widened the residual highway into multiple lanes. mHC adds traffic rules so lane changes cannot create unbounded amplification.
 
-## 11. Systems problem: HC is FLOP-light but I/O-heavy
+## Systems problem: HC is FLOP-light but I/O-heavy
 
 HC and mHC keep attention/MLP FLOPs mostly unchanged, but they create a wider residual stream of size $nC$.
 
@@ -892,11 +892,11 @@ For $n=4$, this is a serious memory-bandwidth problem even if FLOPs look cheap. 
 
 {% include image.liquid url="/assets/img/posts_images/hyper_connections_mhc/fig-14.jpeg" description="mHC efficient training modifications. Source: <a href='https://www.youtube.com/watch?v=jYn_1PpRzxI'>How mHC Reinvents Residual Connections</a>." %}
 
-## 12. mHC's efficiency optimizations
+## mHC's efficiency optimizations
 
 DeepSeek's mHC paper adds infrastructure work to make the math practical.
 
-### 12.1 Kernel fusion
+### Kernel fusion
 
 mHC fuses coefficient generation, RMSNorm-related operations, Sinkhorn-Knopp, and residual merge paths where possible. In particular, it fuses the post/residual application:
 
@@ -924,7 +924,7 @@ $$
 nC.
 $$
 
-### 12.2 Recomputing instead of storing
+### Recomputing instead of storing
 
 Because the mHC coefficient kernels are cheaper than the attention/MLP block, the paper discards many intermediate mHC activations after the forward pass and recomputes them during backward.
 
@@ -965,13 +965,13 @@ def backward_with_mhc_recompute(block_start_x, saved_layer_outputs, layers):
     return run_backward_from_recomputed_states(states, layers)
 ```
 
-### 12.3 Pipeline overlap
+### Pipeline overlap
 
 For large-scale distributed training, the $n$-stream state increases pipeline communication. DeepSeek extends its DualPipe schedule so mHC communication and recomputation can overlap with useful compute, especially around pipeline-stage boundaries.
 
 The result reported for $n=4$ is only **6.7% additional training time overhead**, after these optimizations.
 
-## 13. Empirical picture
+## Empirical picture
 
 The original HC paper reports large gains in OLMo/OLMoE-style pretraining. In the OLMoE-1B-7B setting, DHC with $n=4$ converged about **1.8x faster** than the baseline and improved several downstream metrics.
 
@@ -989,7 +989,7 @@ The stability story is more important than the raw score table:
 - mHC keeps the multi-stream expressivity while making the residual product behave like conservative mixing;
 - the composite gain drops from nearly $3000$ in HC to a bounded value around $1.6$ in mHC's finite-iteration implementation.
 
-## 14. Why the constraint works
+## Why the constraint works
 
 The key mechanism in mHC is the doubly stochastic constraint on $\mathcal{H}^{\mathrm{res}}$. Its effect is easiest to see through the residual product across depth:
 
@@ -999,17 +999,17 @@ The key mechanism in mHC is the doubly stochastic constraint on $\mathcal{H}^{\m
 4. The constraint needs systems support. Without kernel fusion, recomputation, and pipeline overlap, the widened residual stream would be too I/O-heavy.
 5. Sinkhorn-Knopp is approximate at finite iteration count. Later variants such as mHC-lite and KromHC target exact or cheaper parameterizations of doubly stochastic residual maps.
 
-## 15. Open engineering questions
+## Open engineering questions
 
 mHC stabilizes the residual product, but it leaves several practical trade-offs.
 
-### 15.1 Finite Sinkhorn iterations
+### Finite Sinkhorn iterations
 
 With finite $t_{\max}$, Sinkhorn-Knopp only approximately reaches the Birkhoff polytope. The mHC paper uses $t_{\max}=20$, which is effective empirically, but still leaves a small approximation gap.
 
 The mHC-lite paper proposes constructing doubly stochastic matrices directly as convex combinations of permutation matrices. This uses the Birkhoff-von Neumann theorem and avoids iterative Sinkhorn projection, but it introduces its own parameterization and engineering trade-offs.
 
-### 15.2 Parameter cost of residual maps
+### Parameter cost of residual maps
 
 In mHC, the residual projection uses:
 
@@ -1027,11 +1027,11 @@ $$
 
 This is manageable for small $n$, but KromHC explores Kronecker-product residual matrices to reduce complexity while preserving exact double stochasticity.
 
-### 15.3 Expressivity versus constraints
+### Expressivity versus constraints
 
 Doubly stochastic matrices forbid negative mixing. This supports conservative signal propagation, but may restrict expressivity. Later work explores alternative manifolds with different stability constraints. The design pressure is the same: make the residual stream learnable without allowing depthwise composition to create pathological gain.
 
-## 16. Summary
+## Summary
 
 Hyper-Connections generalize residual connections by turning the single residual stream into $n$ streams and learning how to aggregate, update, and mix them:
 
