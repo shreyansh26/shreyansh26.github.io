@@ -33,64 +33,57 @@ $(document).ready(function () {
 
     // Override the getHeadings function
     Toc.helpers.getHeadings = function (el, topLevel) {
-      return this.findOrFilter(el, "h1, h2, h3").filter(":not([data-toc-skip])");
+      return this.findOrFilter(el, "h2, h3, h4").filter(":not([data-toc-skip])");
     };
 
-    // Override the populateNav function to handle proper nesting
+    // Override the populateNav function so blog section headings are the top level.
     Toc.helpers.populateNav = function (nav, topLevel, headings) {
       var self = this;
-      var lastH1Item = null;
       var lastH2Item = null;
+      var lastH3Item = null;
 
       headings.each(function (i, heading) {
         var level = self.getNavLevel(heading);
         var navItem = self.generateNavItem(heading);
 
-        // Different nesting based on heading level
-        if (level === 1) {
-          // h1 goes in the main nav
+        if (level === 2) {
           nav.append(navItem);
-          lastH1Item = navItem;
-          lastH2Item = null;
-        } else if (level === 2) {
-          // h2 goes under its parent h1
-          if (lastH1Item) {
-            var h1ChildNav = lastH1Item.find("> ul.nav");
-            if (h1ChildNav.length === 0) {
-              h1ChildNav = self.createChildNavList(lastH1Item);
-            }
-            h1ChildNav.append(navItem);
-            lastH2Item = navItem;
-          } else {
-            // No parent h1, append to main nav
-            nav.append(navItem);
-            lastH2Item = navItem;
-          }
+          lastH2Item = navItem;
+          lastH3Item = null;
         } else if (level === 3) {
-          // h3 goes under its parent h2
           if (lastH2Item) {
             var h2ChildNav = lastH2Item.find("> ul.nav");
             if (h2ChildNav.length === 0) {
               h2ChildNav = self.createChildNavList(lastH2Item);
             }
             h2ChildNav.append(navItem);
+            lastH3Item = navItem;
           } else {
-            // No parent h2, append to main nav or h1 depending on context
-            if (lastH1Item) {
-              var h1ChildNav = lastH1Item.find("> ul.nav");
-              if (h1ChildNav.length === 0) {
-                h1ChildNav = self.createChildNavList(lastH1Item);
-              }
-              h1ChildNav.append(navItem);
-            } else {
-              nav.append(navItem);
+            nav.append(navItem);
+            lastH3Item = navItem;
+          }
+        } else if (level === 4) {
+          if (lastH3Item) {
+            var h3ChildNav = lastH3Item.find("> ul.nav");
+            if (h3ChildNav.length === 0) {
+              h3ChildNav = self.createChildNavList(lastH3Item);
             }
+            h3ChildNav.append(navItem);
+          } else if (lastH2Item) {
+            var h2FallbackChildNav = lastH2Item.find("> ul.nav");
+            if (h2FallbackChildNav.length === 0) {
+              h2FallbackChildNav = self.createChildNavList(lastH2Item);
+            }
+            h2FallbackChildNav.append(navItem);
+          } else {
+            nav.append(navItem);
           }
         }
       });
     };
 
     Toc.init($myNav);
+    initCollapsibleToc(navSelector);
 
     $("body").scrollspy({
       target: navSelector,
@@ -123,3 +116,147 @@ $(document).ready(function () {
     trigger: "hover",
   });
 });
+
+function initCollapsibleToc(navSelector) {
+  var toc = document.querySelector(navSelector);
+  if (!toc) return;
+
+  var rootList = toc.querySelector(":scope > ul.nav");
+  if (!rootList) return;
+
+  var topItems = Array.prototype.slice.call(rootList.children).filter(function (item) {
+    return item.matches("li");
+  });
+  if (!topItems.length) return;
+
+  var sectionLinks = Array.prototype.slice
+    .call(toc.querySelectorAll('a[href^="#"]'))
+    .map(function (link) {
+      var rawId = link.getAttribute("href").slice(1);
+      var id = rawId;
+      try {
+        id = decodeURIComponent(rawId);
+      } catch (error) {
+        id = rawId;
+      }
+      return {
+        link: link,
+        heading: document.getElementById(id),
+        topItem: getTopLevelItem(link, rootList),
+      };
+    })
+    .filter(function (entry) {
+      return entry.heading && entry.topItem;
+    });
+
+  if (!sectionLinks.length) return;
+
+  var activeTopItem = null;
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  toc.classList.add("toc-auto-collapse");
+
+  topItems.forEach(function (item) {
+    var childNav = item.querySelector(":scope > ul.nav");
+    if (!childNav) return;
+
+    item.classList.add("toc-has-children");
+    var link = item.querySelector(":scope > a");
+    if (link) link.setAttribute("aria-expanded", "false");
+  });
+
+  function setChildNavHeight(item, expand, animate) {
+    var childNav = item.querySelector(":scope > ul.nav");
+    if (!childNav) return;
+
+    item.classList.toggle("toc-expanded", expand);
+    item.classList.toggle("toc-collapsed", !expand);
+
+    var link = item.querySelector(":scope > a");
+    if (link) link.setAttribute("aria-expanded", expand ? "true" : "false");
+
+    if (!animate || reduceMotion) {
+      childNav.style.height = expand ? "auto" : "0px";
+      return;
+    }
+
+    var currentHeight = childNav.getBoundingClientRect().height;
+    var targetHeight = expand ? childNav.scrollHeight : 0;
+
+    if (Math.abs(currentHeight - targetHeight) < 1) {
+      childNav.style.height = expand ? "auto" : "0px";
+      return;
+    }
+
+    childNav.style.height = currentHeight + "px";
+    childNav.offsetHeight;
+    childNav.style.height = targetHeight + "px";
+
+    var onTransitionEnd = function (event) {
+      if (event.propertyName !== "height") return;
+      childNav.removeEventListener("transitionend", onTransitionEnd);
+      if (item.classList.contains("toc-expanded")) {
+        childNav.style.height = "auto";
+      }
+    };
+
+    childNav.addEventListener("transitionend", onTransitionEnd);
+  }
+
+  function setActiveTopItem(nextTopItem, animate) {
+    if (!nextTopItem || activeTopItem === nextTopItem) return;
+    activeTopItem = nextTopItem;
+
+    topItems.forEach(function (item) {
+      setChildNavHeight(item, item === nextTopItem, animate);
+    });
+  }
+
+  function getActiveTopItemFromScroll() {
+    var activeEntry = sectionLinks[0];
+
+    sectionLinks.forEach(function (entry) {
+      if (entry.heading.getBoundingClientRect().top <= 80) {
+        activeEntry = entry;
+      }
+    });
+
+    return activeEntry.topItem;
+  }
+
+  var ticking = false;
+  function requestScrollUpdate() {
+    if (ticking) return;
+
+    ticking = true;
+    window.requestAnimationFrame(function () {
+      setActiveTopItem(getActiveTopItemFromScroll(), true);
+      ticking = false;
+    });
+  }
+
+  toc.addEventListener("click", function (event) {
+    var link = event.target && event.target.closest ? event.target.closest('a[href^="#"]') : null;
+    if (!link || !toc.contains(link)) return;
+
+    var topItem = getTopLevelItem(link, rootList);
+    if (topItem) setActiveTopItem(topItem, true);
+  });
+
+  window.addEventListener("scroll", requestScrollUpdate, { passive: true });
+  window.addEventListener("resize", function () {
+    setActiveTopItem(getActiveTopItemFromScroll(), false);
+  });
+
+  setActiveTopItem(getActiveTopItemFromScroll(), false);
+}
+
+function getTopLevelItem(element, rootList) {
+  var item = element.closest("li");
+
+  while (item && item.parentElement !== rootList) {
+    item = item.parentElement ? item.parentElement.closest("li") : null;
+  }
+
+  return item && item.parentElement === rootList ? item : null;
+}

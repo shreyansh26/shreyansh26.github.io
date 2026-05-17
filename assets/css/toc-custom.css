@@ -43,10 +43,29 @@
   padding-left: 44px;
 }
 
-/* Make sure all nested levels are visible */
+/* Make sure nested levels can be animated instead of display-toggled */
 #toc-sidebar .nav .nav,
 #toc-sidebar .nav .nav .nav {
   display: block !important;
   padding-top: 0;
   padding-bottom: 0;
+}
+
+#toc-sidebar.toc-auto-collapse > .nav > li > .nav {
+  overflow: hidden;
+  transition: height 200ms ease;
+}
+
+#toc-sidebar.toc-auto-collapse > .nav > li.toc-collapsed > .nav {
+  height: 0;
+}
+
+#toc-sidebar.toc-auto-collapse > .nav > li.toc-expanded > a {
+  color: var(--global-theme-color);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #toc-sidebar.toc-auto-collapse > .nav > li > .nav {
+    transition: none;
+  }
 }
