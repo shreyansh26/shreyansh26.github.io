@@ -27,10 +27,7 @@
       if (caption.querySelector(".source-credit")) return;
       var source = document.createElement("span");
       source.className = "source-credit";
-      source.innerHTML =
-        'Source: <a href="' +
-        videoSourceUrl +
-        '">Engram video by Jia-Bin Huang</a>.';
+      source.innerHTML = 'Source: <a href="' + videoSourceUrl + '">Engram video by Jia-Bin Huang</a>.';
       caption.appendChild(source);
     });
 
@@ -99,14 +96,7 @@
         var width = 12 + (slot % 88);
         var row = document.createElement("div");
         row.className = "slot-line";
-        row.innerHTML =
-          "<span>head " +
-          head +
-          '</span><span class="slot-bar"><i style="--w:' +
-          width +
-          '%"></i></span><span>' +
-          slot +
-          "</span>";
+        row.innerHTML = "<span>head " + head + '</span><span class="slot-bar"><i style="--w:' + width + '%"></i></span><span>' + slot + "</span>";
         slotList.appendChild(row);
       }
     }
@@ -131,15 +121,7 @@
     var lossValue = root.querySelector("#lossValue");
 
     function updateAllocation() {
-      if (
-        !rhoRange ||
-        !rhoValue ||
-        !moeBar ||
-        !engramBar ||
-        !moeShare ||
-        !engramShare ||
-        !lossValue
-      ) {
+      if (!rhoRange || !rhoValue || !moeBar || !engramBar || !moeShare || !engramShare || !lossValue) {
         return;
       }
 

@@ -1,0 +1,21 @@
+# Historical CTF challenge endpoints and expired demo services.
+^http://localhost:
+^https?://127\.0\.0\.1
+^http://13\.48\.71\.231:50000/
+^http://ctfchallenges\.ritsec\.club:5000/
+^https://pwn2\.win/NIZKCTF-js/challenges/androids_encryption$
+^http://codefest\.tech/
+^https://kuchenblech\.xyz/
+^http://shell-storm\.org/shellcode/files/shellcode-811\.php$
+^http://www\.md5online\.org/
+^https://www\.malwaretech\.com/vm1$
+
+# External resources that moved, block CI, or rate-limit link checkers.
+^https://www\.linkedin\.com/
+^https://unsplash\.com/
+^https://drive\.google\.com/file/d/1t5d_lKkdoG1aicBJYhM8wqh7Ispk0G4U/view
+^https://play\.google\.com/store/apps/details\?id=com\.progressio\.wildskills$
+^https://cdn-images-1\.medium\.com/max/800/0$
+^https://security\.cse\.iitk\.ac\.in/
+^https://iitbhu\.ac\.in/dept/cse/people/kkshuklacse$
+^https://chiaracampagnola\.io/2020/10/29/from-transformers-to-performers/

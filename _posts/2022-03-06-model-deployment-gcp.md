@@ -83,7 +83,7 @@ streamlit run app.py
 
 {% include image.liquid url="/assets/img/posts_images/model_deployment_gcp/ini-streamlit.PNG" description="" %}
 
-Right now, the `Predict GCP` button will give an error on clicking. It requires a json configuration file which we will obtain when we deploy our model. To get the `Predict AWS` button working for your model, refer to a separate [tutorial](https://shreyansh26.github.io/post/2021-12-28_model_deployment_using_aws_lambda/) I made on that.
+Right now, the `Predict GCP` button will give an error on clicking. It requires a json configuration file which we will obtain when we deploy our model. To get the `Predict AWS` button working for your model, refer to a separate [tutorial](https://shreyansh26.github.io/post/2022-01-23_model_deployment_using_aws_lambda/) I made on that.
 
 
 ### 2. Storing the model in a GCP Bucket

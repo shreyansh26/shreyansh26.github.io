@@ -102,7 +102,7 @@ document.getElementById("openpopup").onclick = function() {showMailingPopUp()};
 -------
 
 ### Model
-The model is a Transformer decoder architecture, very similar to GPT-1. You can find details [here](http://localhost:1313/post/2021-05-02_language_understanding_generative_pretraining/#task-specific-input-transformations). Some modifications include 
+The model is a Transformer decoder architecture, very similar to GPT-1. You can find details [here](https://shreyansh26.github.io/post/2021-05-02_language_understanding_generative_pretraining/#task-specific-input-transformations). Some modifications include
 
 * Moving the layer norm to the input of each sub-block and adding an additional layer norm after the final self-attention block.   
 * A modified initialization which accounts for the accumulation on the residual path with model depth is also used.   

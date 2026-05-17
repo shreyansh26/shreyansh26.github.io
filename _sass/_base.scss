@@ -5,27 +5,27 @@
 // Typography
 
 @font-face {
-  font-family: 'Palatino Linotype';
-  src: url('../fonts/Palatino Linotype.ttf') format('truetype');
+  font-family: "Palatino Linotype";
+  src: url("../fonts/Palatino Linotype.ttf") format("truetype");
   font-weight: normal;
 }
 
 @font-face {
-  font-family: 'Palatino Linotype';
-  src: url('../fonts/Palatino Linotype Bold.ttf') format('truetype');
+  font-family: "Palatino Linotype";
+  src: url("../fonts/Palatino Linotype Bold.ttf") format("truetype");
   font-weight: bold;
 }
 
 @font-face {
-  font-family: 'Palatino Linotype';
-  src: url('../fonts/Palatino Linotype Italic.ttf') format('truetype');
+  font-family: "Palatino Linotype";
+  src: url("../fonts/Palatino Linotype Italic.ttf") format("truetype");
   font-weight: normal;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'Palatino Linotype';
-  src: url('../fonts/Palatino Linotype Bold Italic.ttf') format('truetype');
+  font-family: "Palatino Linotype";
+  src: url("../fonts/Palatino Linotype Bold Italic.ttf") format("truetype");
   font-weight: bold;
   font-style: italic;
 }
@@ -45,7 +45,8 @@ span {
   font-family: "Palatino Linotype";
 }
 
-h1, h2 {
+h1,
+h2 {
   padding-top: 1em;
 }
 
@@ -918,15 +919,18 @@ blockquote {
   font-family: "Source Code Pro", monospace;
 }
 
-code span, code p {
+code span,
+code p {
   font-family: inherit; /* Inherit the font from the code tag */
 }
 
-blockquote span, blockquote p {
+blockquote span,
+blockquote p {
   font-family: inherit; /* Inherit the font from the code tag */
 }
 
-.gist-data span, .gist-data p {
+.gist-data span,
+.gist-data p {
   font-family: inherit; /* Inherit the font from the code tag */
 }
 
@@ -1356,7 +1360,10 @@ ninja-keys::part(ninja-input-wrapper) {
   gap: 8px !important;
   border: none !important;
   box-shadow: 0 2px 8px rgba(63, 81, 181, 0.25) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease !important;
 
   &::before {
     content: "\f0e0";

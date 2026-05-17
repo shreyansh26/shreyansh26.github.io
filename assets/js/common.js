@@ -26,26 +26,26 @@ $(document).ready(function () {
 
     var navSelector = "#toc-sidebar";
     var $myNav = $(navSelector);
-    
+
     // Save original functions
     var originalGetHeadings = Toc.helpers.getHeadings;
     var originalPopulateNav = Toc.helpers.populateNav;
-    
+
     // Override the getHeadings function
-    Toc.helpers.getHeadings = function(el, topLevel) {
+    Toc.helpers.getHeadings = function (el, topLevel) {
       return this.findOrFilter(el, "h1, h2, h3").filter(":not([data-toc-skip])");
     };
-    
+
     // Override the populateNav function to handle proper nesting
-    Toc.helpers.populateNav = function(nav, topLevel, headings) {
+    Toc.helpers.populateNav = function (nav, topLevel, headings) {
       var self = this;
       var lastH1Item = null;
       var lastH2Item = null;
-      
-      headings.each(function(i, heading) {
+
+      headings.each(function (i, heading) {
         var level = self.getNavLevel(heading);
         var navItem = self.generateNavItem(heading);
-        
+
         // Different nesting based on heading level
         if (level === 1) {
           // h1 goes in the main nav
@@ -55,7 +55,7 @@ $(document).ready(function () {
         } else if (level === 2) {
           // h2 goes under its parent h1
           if (lastH1Item) {
-            var h1ChildNav = lastH1Item.find('> ul.nav');
+            var h1ChildNav = lastH1Item.find("> ul.nav");
             if (h1ChildNav.length === 0) {
               h1ChildNav = self.createChildNavList(lastH1Item);
             }
@@ -69,7 +69,7 @@ $(document).ready(function () {
         } else if (level === 3) {
           // h3 goes under its parent h2
           if (lastH2Item) {
-            var h2ChildNav = lastH2Item.find('> ul.nav');
+            var h2ChildNav = lastH2Item.find("> ul.nav");
             if (h2ChildNav.length === 0) {
               h2ChildNav = self.createChildNavList(lastH2Item);
             }
@@ -77,7 +77,7 @@ $(document).ready(function () {
           } else {
             // No parent h2, append to main nav or h1 depending on context
             if (lastH1Item) {
-              var h1ChildNav = lastH1Item.find('> ul.nav');
+              var h1ChildNav = lastH1Item.find("> ul.nav");
               if (h1ChildNav.length === 0) {
                 h1ChildNav = self.createChildNavList(lastH1Item);
               }
@@ -89,9 +89,9 @@ $(document).ready(function () {
         }
       });
     };
-    
+
     Toc.init($myNav);
-    
+
     $("body").scrollspy({
       target: navSelector,
     });

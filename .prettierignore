@@ -7,5 +7,16 @@ assets/js/distillpub/template.v2.js
 assets/js/search/*.js
 assets/plotly/demo.html
 lighthouse_results/**
+.jekyll-cache/**
+.tweet-cache/**
+.venv/**
+_site/**
 _posts/2015-10-20-math.md
 _sass/font-awesome/*.scss
+
+# Prose and Liquid-heavy content is not stable under automated formatting.
+_news/**
+_pages/**
+_posts/**
+_projects/**
+_data/bookshelf*.yml
