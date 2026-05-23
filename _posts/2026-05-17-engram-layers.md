@@ -5,7 +5,7 @@ date: 2026-05-17
 author: "Shreyansh Singh"
 description: "A technical explainer for DeepSeek's Engram layers: conditional memory, hashed n-gram lookup, context-aware gating, sparse-capacity allocation, and the implementation path inside Transformer blocks."
 thumbnail: /assets/img/posts_images/engram_layers/engram-note-13.png
-tags: llms transformers engram memory sparsity
+tags: llms transformers engram memory sparsity paper-summaries
 categories: ["LLMs", "MLSys"]
 giscus_comments: true
 related_posts: false
