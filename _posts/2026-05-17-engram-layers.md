@@ -654,6 +654,122 @@ _styles: |
         transition: none;
       }
     }
+
+    html[data-theme="dark"] .engram-post {
+      --engram-ink: #f2eadf;
+      --engram-muted: #d4c8b8;
+      --engram-paper: #211f1a;
+      --engram-paper-strong: #2a261f;
+      --engram-paper-muted: #393126;
+      --engram-line: rgba(255, 250, 240, 0.16);
+      --engram-line-strong: rgba(255, 250, 240, 0.3);
+      --engram-night: #080907;
+      --engram-night-2: #121610;
+      --engram-copper: #d3915b;
+      --engram-copper-dark: #f0b47f;
+      --engram-teal: #63c1c8;
+      --engram-green: #9ac47d;
+      --engram-plum: #6d4668;
+      --engram-gold: #f0cf78;
+      --engram-blue: #8fb9df;
+      color: var(--engram-ink);
+    }
+
+    html[data-theme="dark"] .engram-post .concept-strip {
+      border-color: var(--engram-line);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(211, 145, 91, 0.18), transparent 16rem),
+        linear-gradient(90deg, rgba(255, 250, 240, 0.045) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255, 250, 240, 0.035) 1px, transparent 1px),
+        var(--engram-paper);
+    }
+
+    html[data-theme="dark"] .engram-post .concept,
+    html[data-theme="dark"] .engram-post .note-block,
+    html[data-theme="dark"] .engram-post .memory-visual,
+    html[data-theme="dark"] .engram-post .lab-panel,
+    html[data-theme="dark"] .engram-post .allocation-demo,
+    html[data-theme="dark"] .engram-post .timeline__item,
+    html[data-theme="dark"] .engram-post .ladder-step,
+    html[data-theme="dark"] .engram-post .paper-card,
+    html[data-theme="dark"] .engram-post .thumb,
+    html[data-theme="dark"] .engram-post .metric {
+      border-color: var(--engram-line);
+      background: rgba(42, 38, 31, 0.94);
+      box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.24);
+    }
+
+    html[data-theme="dark"] .engram-post .asset-figure,
+    html[data-theme="dark"] .engram-post .table-wrap {
+      border-color: var(--engram-line);
+      background: var(--engram-paper-strong);
+      box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.24);
+    }
+
+    html[data-theme="dark"] .engram-post .lead,
+    html[data-theme="dark"] .engram-post .concept p,
+    html[data-theme="dark"] .engram-post .story-section p,
+    html[data-theme="dark"] .engram-post .paper-card p,
+    html[data-theme="dark"] .engram-post .timeline__item p,
+    html[data-theme="dark"] .engram-post li,
+    html[data-theme="dark"] .engram-post .ladder-step span,
+    html[data-theme="dark"] .engram-post .metric span,
+    html[data-theme="dark"] .engram-post .slot-line,
+    html[data-theme="dark"] .engram-post .thumb span {
+      color: var(--engram-muted);
+    }
+
+    html[data-theme="dark"] .engram-post .timeline-title,
+    html[data-theme="dark"] .engram-post .quote-line,
+    html[data-theme="dark"] .engram-post .paper-card h3 {
+      color: var(--engram-ink);
+    }
+
+    html[data-theme="dark"] .engram-post .phrase-buttons button {
+      color: var(--engram-ink);
+      border-color: var(--engram-line-strong);
+      background: rgba(255, 250, 240, 0.06);
+    }
+
+    html[data-theme="dark"] .engram-post .phrase-buttons button:hover,
+    html[data-theme="dark"] .engram-post .phrase-buttons button.is-active {
+      color: var(--engram-ink);
+      border-color: rgba(240, 207, 120, 0.62);
+      background: rgba(240, 207, 120, 0.16);
+    }
+
+    html[data-theme="dark"] .engram-post .memory-visual {
+      background: radial-gradient(circle at 30% 20%, rgba(99, 193, 200, 0.16), transparent 13rem), var(--engram-paper-strong);
+    }
+
+    html[data-theme="dark"] .engram-post .lab-panel {
+      background: linear-gradient(135deg, rgba(99, 193, 200, 0.12), rgba(211, 145, 91, 0.12)), var(--engram-paper-strong);
+    }
+
+    html[data-theme="dark"] .engram-post .equation-block {
+      border-color: rgba(255, 250, 240, 0.2);
+      background: #0f130d;
+      color: #fffaf0;
+    }
+
+    html[data-theme="dark"] .engram-post figcaption {
+      border-top-color: var(--engram-line);
+      color: var(--engram-muted);
+      background: rgba(32, 28, 22, 0.92);
+    }
+
+    html[data-theme="dark"] .engram-post .source-credit {
+      color: #c7b8a4;
+    }
+
+    html[data-theme="dark"] .engram-post .slot-bar,
+    html[data-theme="dark"] .engram-post .bar-track {
+      background: rgba(255, 250, 240, 0.12);
+    }
+
+    html[data-theme="dark"] .engram-post .quote-line {
+      background: rgba(99, 193, 200, 0.12);
+    }
 ---
 
 <div class="engram-post" markdown="1">
