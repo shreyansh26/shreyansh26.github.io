@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Cursor spark favicon">
+  <defs>
+    <linearGradient id="favicon-bg" x1="18" y1="14" x2="110" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#101820"/>
+      <stop offset="1" stop-color="#181716"/>
+    </linearGradient>
+    <linearGradient id="favicon-accent" x1="70" y1="25" x2="104" y2="102" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4aa8bd"/>
+      <stop offset="1" stop-color="#0076df"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="128" height="128" rx="28" fill="url(#favicon-bg)"/>
+  <path
+    d="M38 36 L68 64 L38 92"
+    fill="none"
+    stroke="#f8fbff"
+    stroke-width="13"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M72 92 H98"
+    fill="none"
+    stroke="url(#favicon-accent)"
+    stroke-width="11"
+    stroke-linecap="round"
+  />
+  <circle cx="98" cy="36" r="7" fill="#4aa8bd"/>
+</svg>
