@@ -5,7 +5,7 @@ date: 2021-05-23
 author: "Shreyansh Singh"
 description: The GPT2 model which aimed to perform complex NLP tasks while relying only on a language model trained in a completely unsupervised fashion.
 thumbnail: /assets/img/posts_images/gpt2/featured.PNG
-tags: ["llm", "transformer", "paper-summaries"]
+tags: ["llm", "transformers", "paper-summaries"]
 categories: ["LLMs"]
 giscus_comments: true
 related_posts: false

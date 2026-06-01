@@ -5,7 +5,7 @@ date: 2026-01-17
 author: "Shreyansh Singh"
 description: "My notes from the Physics of Language Models series of papers."
 thumbnail: /assets/img/posts_images/physics_of_lms_31/featured.png
-tags: transformer knowledge paper-summaries
+tags: transformers knowledge paper-summaries
 categories: ["LLMs"]
 giscus_comments: true
 related_posts: false
