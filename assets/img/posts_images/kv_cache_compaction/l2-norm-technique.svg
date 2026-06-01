@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">L2 norm KV compression</title>
+  <desc id="desc">The L2 norm method scores cached keys by norm and keeps low-norm keys as a query-free proxy for later attention.</desc>
+  <rect width="1200" height="520" fill="#f6f1e8"/>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#2d2922"/>
+    </marker>
+    <style>
+      .title{font:700 34px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#1c1914}
+      .body{font:500 18px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#443b31}
+      .label{font:700 20px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#231f19}
+      .small{font:500 16px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#51483d}
+      .panel{fill:#fffaf0;stroke:#d0bea0;stroke-width:2;rx:8}
+      .bar{rx:5}
+      .arrow{stroke:#2d2922;stroke-width:3;marker-end:url(#arrow);fill:none}
+      .keep{fill:#2f6d72}
+      .drop{fill:#cdbfaa}
+      .white{font:700 17px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fff}
+      .center{text-anchor:middle}
+    </style>
+  </defs>
+  <text class="title" x="64" y="68">L2 norm: score keys without observing future queries</text>
+  <text class="body" x="66" y="108">The paper reports that low key norms often correlate with higher later attention.</text>
+
+  <rect class="panel" x="70" y="150" width="460" height="295"/>
+  <text class="label" x="102" y="192">Cached key norms</text>
+  <text class="small" x="102" y="220">Compute ||k<tspan baseline-shift="sub" font-size="70%">i</tspan>|| for each cached key.</text>
+  <rect class="bar keep" x="115" y="342" width="54" height="42"/>
+  <rect class="bar drop" x="190" y="292" width="54" height="92"/>
+  <rect class="bar keep" x="265" y="325" width="54" height="59"/>
+  <rect class="bar drop" x="340" y="260" width="54" height="124"/>
+  <rect class="bar keep" x="415" y="352" width="54" height="32"/>
+  <text class="small center" x="142" y="412">low</text>
+  <text class="small center" x="217" y="412">high</text>
+  <text class="small center" x="292" y="412">low</text>
+  <text class="small center" x="367" y="412">high</text>
+  <text class="small center" x="442" y="412">low</text>
+
+  <path class="arrow" d="M540 295 H650"/>
+
+  <rect class="panel" x="670" y="150" width="460" height="295"/>
+  <text class="label" x="702" y="192">Retained cache</text>
+  <text class="small" x="702" y="220">Keep low-norm keys; drop high-norm keys.</text>
+  <rect class="bar keep" x="720" y="280" width="105" height="70"/>
+  <rect class="bar keep" x="850" y="280" width="105" height="70"/>
+  <rect class="bar keep" x="980" y="280" width="105" height="70"/>
+  <text class="white center" x="772.5" y="322">k<tspan baseline-shift="sub" font-size="70%">0</tspan></text>
+  <text class="white center" x="902.5" y="322">k<tspan baseline-shift="sub" font-size="70%">2</tspan></text>
+  <text class="white center" x="1032.5" y="322">k<tspan baseline-shift="sub" font-size="70%">4</tspan></text>
+  <text class="small" x="704" y="395">No attention matrix is needed;</text>
+  <text class="small" x="704" y="420">the score is available from K alone.</text>
+</svg>

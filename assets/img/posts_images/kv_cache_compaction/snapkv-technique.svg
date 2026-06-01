@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+  <title id="title">SnapKV prompt attention compression</title>
+  <desc id="desc">SnapKV uses an observation window at the end of the prompt to score prefix tokens, pools the scores, and keeps selected prefix tokens plus the observation window.</desc>
+  <rect width="1200" height="560" fill="#f6f1e8"/>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#2d2922"/>
+    </marker>
+    <style>
+      .title{font:700 34px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#1c1914}
+      .body{font:500 18px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#443b31}
+      .label{font:700 20px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#231f19}
+      .small{font:500 16px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#51483d}
+      .panel{fill:#fffaf0;stroke:#d0bea0;stroke-width:2;rx:8}
+      .tok{stroke:#8f7f65;stroke-width:2;rx:7}
+      .prefix{fill:#d8ccb6}
+      .hot{fill:#8a5b32}
+      .obs{fill:#2f6d72}
+      .pool{fill:#7a3f5f}
+      .arrow{stroke:#2d2922;stroke-width:3;marker-end:url(#arrow);fill:none}
+      .white{font:700 17px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fff}
+      .center{text-anchor:middle}
+    </style>
+  </defs>
+  <text class="title" x="64" y="68">SnapKV: observation attention selects prefix cache positions</text>
+  <text class="body" x="66" y="108">Attention from the observation window scores older prefix positions before generation starts.</text>
+
+  <rect class="panel" x="70" y="150" width="1060" height="128"/>
+  <text class="label" x="100" y="190">Prompt prefill</text>
+  <rect class="tok prefix" x="218" y="205" width="92" height="46"/>
+  <rect class="tok hot" x="322" y="205" width="92" height="46"/>
+  <rect class="tok prefix" x="426" y="205" width="92" height="46"/>
+  <rect class="tok hot" x="530" y="205" width="92" height="46"/>
+  <rect class="tok prefix" x="634" y="205" width="92" height="46"/>
+  <rect class="tok obs" x="738" y="205" width="92" height="46"/>
+  <rect class="tok obs" x="842" y="205" width="92" height="46"/>
+  <rect class="tok obs" x="946" y="205" width="92" height="46"/>
+  <text class="small center" x="264" y="234">old</text>
+  <text class="white center" x="368" y="234">select</text>
+  <text class="small center" x="472" y="234">old</text>
+  <text class="white center" x="576" y="234">select</text>
+  <text class="small center" x="680" y="234">old</text>
+  <text class="white center" x="784" y="234">observe</text>
+  <text class="white center" x="888" y="234">observe</text>
+  <text class="white center" x="992" y="234">observe</text>
+
+  <path class="arrow" d="M600 285 V340"/>
+  <rect class="panel" x="230" y="345" width="330" height="128"/>
+  <text class="label" x="262" y="386">Score and pool</text>
+  <text class="small" x="262" y="416">Sum attention from observed tokens.</text>
+  <text class="small" x="262" y="442">Average-pool nearby peaks.</text>
+
+  <path class="arrow" d="M570 409 H675"/>
+  <rect class="panel" x="690" y="345" width="330" height="128"/>
+  <text class="label" x="722" y="386">Compressed cache</text>
+  <rect class="tok hot" x="724" y="410" width="132" height="42"/>
+  <rect class="tok obs" x="874" y="410" width="132" height="42"/>
+  <text class="white center" x="790" y="437">selected K/V</text>
+  <text class="white center" x="940" y="437">obs K/V</text>
+</svg>

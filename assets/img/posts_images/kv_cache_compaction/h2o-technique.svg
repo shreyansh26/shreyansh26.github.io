@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" role="img" aria-labelledby="title desc">
+  <title id="title">H2O heavy hitter cache eviction</title>
+  <desc id="desc">H2O keeps recent tokens and tokens with high accumulated attention history under a fixed KV cache budget.</desc>
+  <rect width="1200" height="540" fill="#f6f1e8"/>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#2d2922"/>
+    </marker>
+    <style>
+      .title{font:700 34px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#1c1914}
+      .body{font:500 18px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#443b31}
+      .label{font:700 20px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#231f19}
+      .small{font:500 16px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#51483d}
+      .panel{fill:#fffaf0;stroke:#d0bea0;stroke-width:2;rx:8}
+      .tok{stroke:#8f7f65;stroke-width:2;rx:7}
+      .h2{fill:#8a5b32}
+      .recent{fill:#2f6d72}
+      .drop{fill:#d8ccb6}
+      .new{fill:#496f3e}
+      .arrow{stroke:#2d2922;stroke-width:3;marker-end:url(#arrow);fill:none}
+      .white{font:700 17px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fff}
+      .center{text-anchor:middle}
+    </style>
+  </defs>
+  <text class="title" x="64" y="68">H2O: keep heavy hitters and recent tokens</text>
+  <text class="body" x="66" y="108">Accumulated attention mass turns eviction into a dynamic heavy-hitter problem.</text>
+
+  <rect class="panel" x="70" y="150" width="480" height="300"/>
+  <text class="label" x="102" y="192">Attention history</text>
+  <text class="small" x="102" y="222">Update each cached token's score during decoding.</text>
+  <rect class="tok h2" x="105" y="300" width="84" height="64"/>
+  <rect class="tok drop" x="202" y="300" width="84" height="64"/>
+  <rect class="tok h2" x="299" y="300" width="84" height="64"/>
+  <rect class="tok recent" x="396" y="300" width="84" height="64"/>
+  <text class="white center" x="147" y="337">0.8</text>
+  <text class="small center" x="244" y="337">0.1</text>
+  <text class="white center" x="341" y="337">0.7</text>
+  <text class="white center" x="438" y="337">new</text>
+  <text class="small" x="104" y="402">Evict the lowest score when the fixed budget is full.</text>
+
+  <path class="arrow" d="M565 300 H665"/>
+  <rect class="panel" x="690" y="150" width="440" height="300"/>
+  <text class="label" x="722" y="192">Retained cache</text>
+  <text class="small" x="722" y="222">Keep high history scores plus the newest token.</text>
+  <rect class="tok h2" x="735" y="300" width="84" height="64"/>
+  <rect class="tok h2" x="847" y="300" width="84" height="64"/>
+  <rect class="tok recent" x="959" y="300" width="84" height="64"/>
+  <text class="white center" x="777" y="337">0.8</text>
+  <text class="white center" x="889" y="337">0.7</text>
+  <text class="white center" x="1001" y="337">new</text>
+  <text class="small" x="722" y="402">Still a subset of original K/V entries.</text>
+</svg>

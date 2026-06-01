@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">STILL flow</title>
+  <desc id="desc">STILL trains a reusable perceiver compactor that maps full keys and values into compact keys, values, and beta attention biases.</desc>
+  <rect width="1200" height="700" fill="#f4f0e8"/>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#2b271f"/>
+    </marker>
+    <style>
+      .title{font:700 34px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#1d1913}
+      .box{fill:#fffaf0;stroke:#c9b898;stroke-width:2;rx:8}
+      .latent{fill:#2d6f57;stroke:#1e4e3d;stroke-width:2;rx:8}
+      .bias{fill:#73547d;stroke:#4c3454;stroke-width:2;rx:8}
+      .txt{font:700 20px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2a241d}
+      .small{font:500 16px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#51483d}
+      .white{font:700 19px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fff}
+      .arrow{stroke:#2b271f;stroke-width:3;marker-end:url(#arrow);fill:none}
+      .center{text-anchor:middle}
+    </style>
+  </defs>
+  <text class="title" x="68" y="66">STILL: train a compactor, then build caches by forward pass</text>
+
+  <rect class="box" x="62" y="128" width="285" height="120"/>
+  <text class="txt center" x="204.5" y="168">Full cache</text>
+  <text class="small center" x="204.5" y="199">K<tspan baseline-shift="sub" font-size="70%">l</tspan>, V<tspan baseline-shift="sub" font-size="70%">l</tspan> for each layer</text>
+  <text class="small center" x="204.5" y="224">from a frozen LLM</text>
+  <path class="arrow" d="M347 188 H390"/>
+
+  <rect class="box" x="390" y="128" width="285" height="120"/>
+  <text class="txt center" x="532.5" y="168">RoPE-aware input</text>
+  <text class="small center" x="532.5" y="199">unrotate K<tspan baseline-shift="sub" font-size="70%">l</tspan>, then</text>
+  <text class="small center" x="532.5" y="224">read [K<tspan baseline-shift="super" font-size="70%">′</tspan><tspan baseline-shift="sub" font-size="70%">l</tspan> ; V<tspan baseline-shift="sub" font-size="70%">l</tspan>]</text>
+  <path class="arrow" d="M675 188 H730"/>
+
+  <rect class="latent" x="730" y="105" width="365" height="155"/>
+  <text class="white center" x="912.5" y="148">Perceiver bottleneck</text>
+  <text class="white center" x="912.5" y="181">learned latent queries</text>
+  <text class="white center" x="912.5" y="214">cross-attend to full cache</text>
+  <text class="white center" x="912.5" y="247">self-attend across slots</text>
+  <path class="arrow" d="M912 260 V330"/>
+
+  <rect class="box" x="655" y="330" width="475" height="160"/>
+  <text class="txt center" x="892.5" y="370">Compact artifact</text>
+  <text class="small center" x="892.5" y="408">C<tspan baseline-shift="sub" font-size="70%">l</tspan><tspan baseline-shift="super" font-size="70%">K</tspan> = RoPE(W<tspan baseline-shift="sub" font-size="70%">K</tspan> Z<tspan baseline-shift="sub" font-size="70%">l</tspan>, latent positions)</text>
+  <text class="small center" x="892.5" y="442">C<tspan baseline-shift="sub" font-size="70%">l</tspan><tspan baseline-shift="super" font-size="70%">V</tspan> = W<tspan baseline-shift="sub" font-size="70%">V</tspan> Z<tspan baseline-shift="sub" font-size="70%">l</tspan></text>
+
+  <rect class="bias" x="700" y="515" width="405" height="58"/>
+  <text class="white center" x="902.5" y="551">β<tspan baseline-shift="sub" font-size="70%">l</tspan> = additive attention bias</text>
+
+  <path class="arrow" d="M655 418 H520 V560 H347"/>
+  <rect class="box" x="62" y="500" width="285" height="120"/>
+  <text class="txt center" x="204.5" y="540">Future query</text>
+  <text class="small center" x="204.5" y="572">short prompt attends to</text>
+  <text class="small center" x="204.5" y="596">compact K/V plus β</text>
+</svg>

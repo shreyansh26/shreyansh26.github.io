@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">KV cache compression taxonomy</title>
+  <desc id="desc">A two-axis map of KV cache methods: token eviction versus learned synthesis, and per-context versus reusable preparation.</desc>
+  <rect width="1200" height="720" fill="#f7f3ea"/>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#222"/>
+    </marker>
+    <style>
+      .axis{stroke:#222;stroke-width:3;marker-end:url(#arrow)}
+      .grid{stroke:#b9ab91;stroke-width:1.5;stroke-dasharray:8 8}
+      .title{font:700 34px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#1d1a15}
+      .label{font:700 21px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b251e}
+      .rowlabel{font:700 18px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#3c3329}
+      .small{font:500 16px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#50483c}
+      .card{fill:#fffaf0;stroke:#d2c1a2;stroke-width:2;rx:8}
+      .chip{font:700 18px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fff}
+      .center{text-anchor:middle}
+    </style>
+  </defs>
+  <text class="title" x="68" y="68">KV cache compression is not one method</text>
+  <text class="small" x="70" y="106">The useful split is what gets compressed and when the compression cost is paid.</text>
+
+  <line class="axis" x1="170" y1="600" x2="1085" y2="600"/>
+  <line class="axis" x1="170" y1="600" x2="170" y2="145"/>
+  <line class="grid" x1="625" y1="145" x2="625" y2="600"/>
+  <line class="grid" x1="170" y1="372" x2="1085" y2="372"/>
+
+  <text class="label" x="276" y="656">Keep original token KV slots</text>
+  <text class="label" x="735" y="656">Create compact learned KV slots</text>
+  <text class="rowlabel" x="58" y="246">Reusable or</text>
+  <text class="rowlabel" x="58" y="270">amortized</text>
+  <text class="rowlabel" x="58" y="478">Online</text>
+  <text class="rowlabel" x="58" y="502">per-context</text>
+
+  <rect class="card" x="225" y="180" width="345" height="132"/>
+  <rect x="247" y="202" width="140" height="30" rx="6" fill="#8a5b32"/>
+  <text class="chip center" x="317" y="224">Evict</text>
+  <text class="small" x="247" y="258">L2, SnapKV, and H2O keep</text>
+  <text class="small" x="247" y="282">tokens judged useful by norms</text>
+  <text class="small" x="247" y="306">or attention history.</text>
+
+  <rect class="card" x="700" y="180" width="345" height="132"/>
+  <rect x="722" y="202" width="140" height="30" rx="6" fill="#7a3f5f"/>
+  <text class="chip center" x="792" y="224">Cartridge</text>
+  <text class="small" x="722" y="258">Optimize one compact cache</text>
+  <text class="small" x="722" y="282">for one corpus against a</text>
+  <text class="small" x="722" y="306">full-context teacher.</text>
+
+  <rect class="card" x="225" y="430" width="345" height="132"/>
+  <rect x="247" y="452" width="140" height="30" rx="6" fill="#54707a"/>
+  <text class="chip center" x="317" y="474">Streaming</text>
+  <text class="small" x="247" y="508">Attention Sink keeps fixed</text>
+  <text class="small" x="247" y="532">initial tokens plus a tail window.</text>
+
+  <rect class="card" x="700" y="430" width="345" height="132"/>
+  <rect x="722" y="452" width="140" height="30" rx="6" fill="#2d6f57"/>
+  <text class="chip center" x="792" y="474">STILL</text>
+  <text class="small" x="722" y="508">Train a compactor once, then</text>
+  <text class="small" x="722" y="532">build compact caches quickly.</text>
+</svg>
