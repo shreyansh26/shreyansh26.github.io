@@ -58,16 +58,28 @@ _styles: |
       var(--kv-paper);
     background-size: 3rem 3rem;
   }
+  .kv-post .kv-hero,
+  .kv-post .kv-figure {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
   .kv-post .kv-hero img,
   .kv-post .kv-figure img {
     display: block;
     width: 100%;
+    max-width: 100%;
     height: auto;
+    margin-left: auto;
+    margin-right: auto;
   }
   .kv-post .kv-caption {
-    margin: 0.65rem 0 1.35rem;
+    max-width: 58rem;
+    margin: 0.65rem auto 1.5rem;
     color: var(--kv-muted);
     font-size: 0.92rem;
+    line-height: 1.45;
+    text-align: center;
   }
   .kv-post .kv-callout {
     margin: 1.25rem 0;
