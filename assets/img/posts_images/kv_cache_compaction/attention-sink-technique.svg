@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" role="img" aria-labelledby="title desc">
+  <title id="title">Attention sinks cache policy</title>
+  <desc id="desc">StreamingLLM keeps initial sink tokens and a tail window ending at the latest token while evicting middle tokens.</desc>
+  <rect width="1200" height="500" fill="#f6f1e8"/>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#2d2922"/>
+    </marker>
+    <style>
+      .title{font:700 34px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#1c1914}
+      .body{font:500 19px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#443b31}
+      .label{font:700 20px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#231f19}
+      .small{font:500 16px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#51483d}
+      .box{stroke:#8f7f65;stroke-width:2;rx:8}
+      .sink{fill:#7a3f5f}
+      .drop{fill:#d8ccb6}
+      .tail{fill:#2f6d72}
+      .latest{fill:#496f3e}
+      .arrow{stroke:#2d2922;stroke-width:3;marker-end:url(#arrow);fill:none}
+      .white{font:700 18px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fff}
+      .center{text-anchor:middle}
+    </style>
+  </defs>
+  <text class="title" x="64" y="68">Attention sinks: fixed anchors plus a tail window</text>
+  <text class="body" x="66" y="108">A pure sliding window can lose the initial sink tokens. StreamingLLM keeps those early positions permanently.</text>
+
+  <text class="label" x="76" y="170">Full timeline</text>
+  <rect class="box sink" x="78" y="205" width="96" height="64"/>
+  <rect class="box sink" x="186" y="205" width="96" height="64"/>
+  <rect class="box drop" x="306" y="205" width="96" height="64"/>
+  <rect class="box drop" x="414" y="205" width="96" height="64"/>
+  <rect class="box drop" x="522" y="205" width="96" height="64"/>
+  <rect class="box tail" x="648" y="205" width="96" height="64"/>
+  <rect class="box tail" x="756" y="205" width="96" height="64"/>
+  <rect class="box tail" x="864" y="205" width="96" height="64"/>
+  <rect class="box latest" x="990" y="205" width="96" height="64"/>
+  <text class="white center" x="126" y="243">sink</text>
+  <text class="white center" x="234" y="243">sink</text>
+  <text class="small center" x="354" y="243">evict</text>
+  <text class="small center" x="462" y="243">evict</text>
+  <text class="small center" x="570" y="243">evict</text>
+  <text class="white center" x="696" y="243">tail</text>
+  <text class="white center" x="804" y="243">tail</text>
+  <text class="white center" x="912" y="243">tail</text>
+  <text class="white center" x="1038" y="243">latest</text>
+
+  <path class="arrow" d="M165 318 H1035"/>
+  <text class="label" x="76" y="374">Retained cache</text>
+  <rect class="box sink" x="240" y="398" width="96" height="64"/>
+  <rect class="box sink" x="355" y="398" width="96" height="64"/>
+  <rect class="box tail" x="530" y="398" width="96" height="64"/>
+  <rect class="box tail" x="645" y="398" width="96" height="64"/>
+  <rect class="box tail" x="760" y="398" width="96" height="64"/>
+  <rect class="box latest" x="875" y="398" width="96" height="64"/>
+  <text class="white center" x="288" y="436">sink</text>
+  <text class="white center" x="403" y="436">sink</text>
+  <text class="white center" x="578" y="436">tail</text>
+  <text class="white center" x="693" y="436">tail</text>
+  <text class="white center" x="808" y="436">tail</text>
+  <text class="white center" x="923" y="436">latest</text>
+</svg>

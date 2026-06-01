@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">KV cache memory growth</title>
+  <desc id="desc">KV cache memory equals the number of cached tokens times a fixed per-token KV footprint determined by layers, KV heads, head dimension, K plus V, and scalar bytes.</desc>
+  <rect width="1200" height="620" fill="#f6f1e8"/>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#302921"/>
+    </marker>
+    <style>
+      .title{font:700 34px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#1c1914}
+      .body{font:500 18px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#40382e}
+      .label{font:700 20px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#231f19}
+      .small{font:500 15px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#4f463a}
+      .mono{font:700 21px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;fill:#191714}
+      .panel{fill:#fffaf0;stroke:#d0bea0;stroke-width:2;rx:8}
+      .token{fill:#3f6f75;stroke:#2d5358;stroke-width:2;rx:6}
+      .factor{stroke-width:2;rx:6}
+      .arrow{stroke:#302921;stroke-width:3;marker-end:url(#arrow);fill:none}
+      .dash{stroke:#9d8d72;stroke-width:2;stroke-dasharray:7 7;fill:none}
+      .white{font:700 17px ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fff}
+      .center{text-anchor:middle}
+    </style>
+  </defs>
+
+  <text class="title" x="64" y="68">The KV cache grows one token at a time</text>
+  <text class="body" x="66" y="108">Separate the growing sequence term from the fixed per-token footprint.</text>
+  <text class="mono" x="88" y="172">KV<tspan baseline-shift="sub" font-size="70%">bytes</tspan>(T) = T * (L * H<tspan baseline-shift="sub" font-size="70%">kv</tspan> * d<tspan baseline-shift="sub" font-size="70%">head</tspan> * 2 * b)</text>
+
+  <rect class="panel" x="70" y="220" width="505" height="275"/>
+  <text class="label" x="100" y="262">T cached tokens</text>
+  <text class="small" x="100" y="292">Longer prompts append more K/V states.</text>
+  <rect class="token" x="102" y="330" width="58" height="64"/>
+  <rect class="token" x="175" y="330" width="58" height="64"/>
+  <rect class="token" x="248" y="330" width="58" height="64"/>
+  <rect class="token" x="321" y="330" width="58" height="64"/>
+  <rect class="token" x="394" y="330" width="58" height="64"/>
+  <text class="white center" x="131" y="368">1</text>
+  <text class="white center" x="204" y="368">2</text>
+  <text class="white center" x="277" y="368">3</text>
+  <text class="white center" x="350" y="368">4</text>
+  <text class="white center" x="423" y="368">...</text>
+  <path class="arrow" d="M104 438 H492"/>
+  <text class="small" x="100" y="470">More prompt tokens mean more cached K/V states.</text>
+
+  <rect class="panel" x="625" y="220" width="505" height="275"/>
+  <text class="label" x="655" y="262">Per-token KV footprint</text>
+  <text class="small" x="655" y="292">These factors are fixed by architecture and precision.</text>
+  <rect class="factor" x="655" y="330" width="100" height="58" fill="#a76739" stroke="#7d4f2a"/>
+  <rect class="factor" x="775" y="330" width="100" height="58" fill="#516b43" stroke="#384d2f"/>
+  <rect class="factor" x="895" y="330" width="100" height="58" fill="#8a4f69" stroke="#62364a"/>
+  <rect class="factor" x="1015" y="330" width="100" height="58" fill="#73547d" stroke="#4c3454"/>
+  <text class="white center" x="705" y="365">L</text>
+  <text class="white center" x="825" y="365">H<tspan baseline-shift="sub" font-size="70%">kv</tspan></text>
+  <text class="white center" x="945" y="365">d<tspan baseline-shift="sub" font-size="70%">head</tspan></text>
+  <text class="white center" x="1065" y="354">2*b</text>
+  <text class="white center" x="1065" y="377">K+V</text>
+  <path class="dash" d="M655 424 H1085"/>
+  <text class="small" x="655" y="456">Compaction changes T; quantization changes b.</text>
+
+  <text class="body" x="70" y="545">A 128K-token prompt is expensive because it keeps 128K per-token footprints resident.</text>
+  <text class="body" x="70" y="575">The model dimensions stay fixed; the number of cached states grows.</text>
+</svg>

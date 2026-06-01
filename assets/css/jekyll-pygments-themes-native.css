@@ -170,6 +170,13 @@
 .highlight .w {
   color: #666666;
 } /* Text.Whitespace */
+
+/* Avoid link-like underlines on highlighted identifiers in dark code blocks. */
+.highlight .gu,
+.highlight .nc,
+.highlight .nn {
+  text-decoration: none;
+}
 .highlight .mf {
   color: #3677a9;
 } /* Literal.Number.Float */
