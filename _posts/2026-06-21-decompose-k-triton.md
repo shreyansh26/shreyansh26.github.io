@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "Decompose-K: From torch.compile to a Hand-Tuned Triton Kernel for Skinny Large-K Matmuls"
+title: "Decompose-K: From torch.compile to Hand-Tuned Triton Kernels for Skinny Large‑K Matmuls"
 date: 2026-06-21
 author: "Shreyansh Singh"
 description: "An implementation deep dive into Decompose-K matmul: why splitting the K dimension helps skinny large-K GEMMs, what torch.compile and Inductor custom-op autotuning emit, and how a vectorized split-reduction Triton kernel ends up beating both."
-thumbnail: /assets/img/posts_images/decompose_k/v2_epilogue_relu_bf16_overall.png
+thumbnail: /assets/img/posts_images/decompose_k/decompose_k_cover.png
 tags: cuda triton gpu mlsys
 categories: ["CUDA", "MLSys"]
 giscus_comments: true
@@ -37,6 +37,8 @@ The problem case is a **skinny, K-dominant** matmul: `M` and `N` are tiny while 
 Decompose-K is a restructuring that fixes exactly this mismatch. The basic idea is simple: if the only big dimension is `K`, then split `K` and parallelize over the split.
 
 ## What Decompose-K does
+
+{% include image.liquid url="/assets/img/posts_images/decompose_k/decompose_k_cover.png" description="Decompose-K splits the long K dimension into S chunks, runs the S partial GEMMs as a batched matmul, and sums the partials (with an optional fused epilogue on the reduction store)." %}
 
 Split the `K` dimension into `S` independent chunks, compute `S` partial GEMMs, then sum the partials:
 
@@ -462,6 +464,10 @@ Two things to read off this table. The fused Decompose-K kernel is consistently 
 It is worth being honest about the effort-to-reward ratio. The hand-written kernel wins, but only by a few percent over custom-op autotuning, and getting there meant rewriting the reducer and widening the search. For most situations, staying with `torch.compile` is perfectly reasonable - as long as it is done carefully. Plain `torch.compile(decomposeK)` was not enough on its own; Inductor decomposes but leaves the epilogue as a separate kernel, and it was that gap that pushed me toward custom-op autotuning. Set up that way, the compiler does a great job, and the hand-written kernel is the last few percent you reach for only when the shape is fixed and the latency genuinely matters.
 
 And this gap is not fundamental. The day Inductor's Decompose-K lowering learns to fuse the epilogue into the reduction store - the same optimization the hand-written kernel relies on - most of this margin trims away on its own, and the compiler path absorbs the win for free.
+
+----
+
+All the kernels, the custom-op autotuning setup, the benchmark harness, and the raw results are on GitHub: [shreyansh26/MLSys-Experiments/decompose-k](https://github.com/shreyansh26/MLSys-Experiments/tree/main/decompose-k).
 
 ---
 
