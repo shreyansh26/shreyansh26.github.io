@@ -462,3 +462,55 @@ Two things to read off this table. The fused Decompose-K kernel is consistently 
 It is worth being honest about the effort-to-reward ratio. The hand-written kernel wins, but only by a few percent over custom-op autotuning, and getting there meant rewriting the reducer and widening the search. For most situations, staying with `torch.compile` is perfectly reasonable - as long as it is done carefully. Plain `torch.compile(decomposeK)` was not enough on its own; Inductor decomposes but leaves the epilogue as a separate kernel, and it was that gap that pushed me toward custom-op autotuning. Set up that way, the compiler does a great job, and the hand-written kernel is the last few percent you reach for only when the shape is fixed and the latency genuinely matters.
 
 And this gap is not fundamental. The day Inductor's Decompose-K lowering learns to fuse the epilogue into the reduction store - the same optimization the hand-written kernel relies on - most of this margin trims away on its own, and the compiler path absorbs the win for free.
+
+---
+
+&nbsp;
+
+<script type="text/javascript" src="//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script>
+
+<!-- <button style="background-color: #70ab17; color: #1770AB" id="openpopup">Subscribe to my posts!</button> -->
+<div class="button_cont" align="center"><button id="openpopup" class="example_a">Subscribe to my posts!</button></div>
+
+<style>
+    .example_a {
+  color: #fff !important;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: #3f51b5;
+  padding: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  border: none;
+  transition: all 0.4s ease 0s;
+    }
+
+    .example_a:hover {
+  background: #434343;
+  letter-spacing: 1px;
+  -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+  -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+  box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+  transition: all 0.4s ease 0s;
+    }
+</style>
+
+
+<script type="text/javascript">
+
+function showMailingPopUp() {
+    window.dojoRequire(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us4.list-manage.com","uuid":"0b10ac14f50d7f4e7d11cf26a","lid":"667a1bb3da","uniqueMethods":true}) })
+
+    document.cookie = "MCPopupClosed=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+}
+
+document.getElementById("openpopup").onclick = function() {showMailingPopUp()};
+
+</script>
+
+&nbsp;  
+
+<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="shreyanshsingh" data-description="Support me on Buy me a coffee!" data-message="" data-color="#FF5F5F" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+Follow me on [Twitter](https://twitter.com/shreyansh_26), [Github](https://github.com/shreyansh26) or connect on [LinkedIn](https://www.linkedin.com/in/shreyansh26/).
