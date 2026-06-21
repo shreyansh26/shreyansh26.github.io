@@ -16,7 +16,7 @@ toc:
 pretty_table: true
 ---
 
-*The source code for this post is available on [GitHub](https://github.com/shreyansh26/MLSys-Experiments/tree/main/decompose-k).*
+*The source code for this post is available on GitHub: [shreyansh26/MLSys-Experiments/decompose-k](https://github.com/shreyansh26/MLSys-Experiments/tree/main/decompose-k).*
 
 *The idea of Decompose-K and the custom-op autotuning workflow comes from the PyTorch Conference talk [Lightning Talk: Faster Than SOTA Kernels in Torch.compile With Subgraph Fusions and Custom Op Autotuning - Elias Ellison & Paul Zhang, Meta](https://www.youtube.com/watch?v=rKQbHSs7dBo). This post is my own implementation walkthrough and benchmark study built around that idea.*
 
