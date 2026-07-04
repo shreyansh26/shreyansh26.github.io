@@ -92,6 +92,10 @@ git checkout -b $DEPLOY_BRANCH
 # Export JEKYLL_ENV=production
 export JEKYLL_ENV=production
 
+if [ -x ".venv/bin/jupyter" ]; then
+  export PATH="$PWD/.venv/bin:$PATH"
+fi
+
 # Build site
 bundle exec jekyll build
 

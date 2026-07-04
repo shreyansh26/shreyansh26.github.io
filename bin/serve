@@ -5,4 +5,4 @@ if [ -x ".venv/bin/jupyter" ]; then
   export PATH="$PWD/.venv/bin:$PATH"
 fi
 
-bundle exec jekyll build
+bundle exec jekyll serve "$@"
