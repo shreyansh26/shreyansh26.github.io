@@ -3,7 +3,7 @@ layout: post
 title: "Softmax and Cross-Entropy Backward Pass"
 date: 2026-07-06
 author: "Shreyansh Singh"
-description: "A derivation of softmax, logsoftmax, and cross-entropy backward passes, showing how the full Jacobian reduces to a row-wise dot product and why logits get the simple gradient p - y."
+description: "A step-by-step derivation of softmax, logsoftmax, and cross-entropy backward passes: how the softmax Jacobian turns into a row-wise dot product, and why the logits gradient is p - y."
 thumbnail: /assets/img/posts_images/softmax_cross_entropy_backward/featured.png
 tags: ml math
 categories: ["ML"]
@@ -16,21 +16,21 @@ toc:
 pretty_table: true
 ---
 
-{% include image.liquid url="/assets/img/posts_images/softmax_cross_entropy_backward/featured.png" description="Softmax backward is a structured Jacobian-vector product. Cross-entropy with logits collapses that structure to the familiar p - y gradient." width="82%" %}
+{% include image.liquid url="/assets/img/posts_images/softmax_cross_entropy_backward/featured.png" description="Softmax backward is a Jacobian-vector product. Cross-entropy with logits turns it into the familiar p - y gradient." width="82%" %}
 
-Softmax followed by cross-entropy is one of those pieces of deep learning math that gets used so often that the result becomes a slogan:
+Softmax plus cross-entropy gets summarized so often as `p - y` that it is easy to forget where that expression comes from:
 
 $$
 \frac{\partial L}{\partial z} = p - y
 $$
 
-That is correct, but it hides two details that are worth understanding.
+The formula is right, but two implementation details are easy to miss.
 
-First, softmax itself is not an elementwise function. Every output probability depends on every input logit in the same row because all classes share the same normalization denominator. Its backward pass is therefore a Jacobian-vector product, not just "take the derivative of each coordinate".
+First, softmax is not elementwise. Every output probability depends on every logit in the same row because the classes share one normalization denominator. So the backward pass is a Jacobian-vector product, not a coordinate-wise derivative.
 
-Second, the simple $$p-y$$ expression is a gradient with respect to **logits**, not probabilities. It appears only after the derivative of the log in cross-entropy cancels the coupled softmax Jacobian in exactly the right way.
+Second, $$p-y$$ is a gradient with respect to **logits**, not probabilities. It shows up only after the log in cross-entropy interacts with the softmax Jacobian.
 
-This post derives both pieces: the general softmax backward pass for an arbitrary upstream gradient, and the cross-entropy/logsoftmax simplification that gives the expression used in training code.
+This note walks through both pieces: the general softmax backward pass for an arbitrary upstream gradient, and the cross-entropy/logsoftmax case that produces the expression used in training code.
 
 ## Setup
 
@@ -65,7 +65,7 @@ $$
 S_{ij} = \frac{e^{Z_{ij}}}{\sum_{\ell=1}^{K} e^{Z_{i\ell}}}.
 $$
 
-Here $$i$$ indexes the batch row. The indices $$j$$ and $$k$$ index classes, vocabulary entries, or whatever the final axis represents. Rows are independent, so we can derive everything for one row and then apply the same formula across the batch.
+Here $$i$$ indexes the batch row. The indices $$j$$ and $$k$$ index classes, vocabulary entries, or whatever lives on the final axis. Rows do not interact, so it is enough to derive the formula for one row and apply it to the whole batch.
 
 ## The Softmax Derivative
 
@@ -87,7 +87,7 @@ $$
 \frac{\partial S_{ij}}{\partial Z_{ik}},
 $$
 
-which asks: if we nudge the logit for class $$k$$, how does the softmax probability for class $$j$$ change?
+This asks a local question: if we nudge the logit for class $$k$$, what happens to the softmax probability assigned to class $$j$$?
 
 Using the quotient rule,
 
@@ -177,7 +177,7 @@ $$
 -S_{ij}S_{ik}.
 $$
 
-The sign is the useful intuition. Increasing a logit's own value increases its own probability. Increasing a different class's logit increases that other class's share of the denominator, so this probability goes down.
+The sign tells the story. Increasing a logit's own value increases its own probability. Increasing some other logit gives that other class more of the shared denominator, so this probability goes down.
 
 ## The Jacobian
 
@@ -219,9 +219,9 @@ S_{ij}\delta_{jk}-S_{ij}S_{ik}
 S_{ij}(\delta_{jk}-S_{ik}).
 $$
 
-The important part is that the Jacobian is dense, but structured. We do not want to materialize a $$K \times K$$ matrix for every row. For a language model vocabulary, $$K$$ might be tens or hundreds of thousands. The backward pass needs the Jacobian-vector product, not the Jacobian itself.
+This Jacobian is dense, but it is also highly structured. We definitely do not want to materialize a $$K \times K$$ matrix for every row. For a language model vocabulary, $$K$$ can be tens or hundreds of thousands. The backward pass needs the Jacobian-vector product, not the Jacobian itself.
 
-There is also a nice reason this Jacobian is symmetric. Define
+There is a clean reason this Jacobian is symmetric. Define
 
 $$
 \operatorname{LSE}(z) = \log \sum_{k=1}^{K} e^{z_k}.
@@ -239,7 +239,7 @@ $$
 J_{\operatorname{softmax}}(z) = \nabla_z^2 \operatorname{LSE}(z).
 $$
 
-For a smooth scalar function, the Hessian is symmetric. That is why $$J_i^\top=J_i$$ here.
+For a smooth scalar function, the Hessian is symmetric. That is why $$J_i^\top=J_i$$ in this case.
 
 ## Backpropagating Through Softmax
 
@@ -326,7 +326,7 @@ G_{S,ij}
 }
 $$
 
-This is the same as multiplying by the full Jacobian, but it only needs a row-wise dot product and an elementwise multiply. In PyTorch-style code:
+This computes the same thing as the full Jacobian multiply, but the actual work is just a row-wise dot product and an elementwise multiply:
 
 ```python
 def softmax_backward(grad_out, softmax_out):
@@ -334,13 +334,13 @@ def softmax_backward(grad_out, softmax_out):
     return softmax_out * (grad_out - dot)
 ```
 
-Here `grad_out` is $$\partial L / \partial S$$ and `softmax_out` is the saved softmax output $$S$$ from the forward pass. The `keepdim=True` matters because the dot product has shape $$B \times 1$$ and should broadcast across the class dimension.
+Here `grad_out` is $$\partial L / \partial S$$, and `softmax_out` is the saved softmax output $$S$$ from the forward pass. The `keepdim=True` keeps the dot product shaped as $$B \times 1$$ so it broadcasts across the class dimension.
 
-One quick sanity check: the rows of $$G_Z$$ sum to zero. This has to be true because adding the same constant to every logit in a row does not change softmax. The backward pass should not create a gradient component in that all-ones direction.
+As a quick sanity check, each row of $$G_Z$$ sums to zero. That has to happen: adding the same constant to every logit in a row does not change softmax, so the backward pass should not push in that all-ones direction.
 
 ## Cross-Entropy With Logits
 
-Now let the target be $$y$$. For a one-hot target, exactly one coordinate is $$1$$. More generally, for label smoothing or soft targets, assume $$y$$ is a normalized target distribution:
+Now let the target be $$y$$. For a one-hot target, exactly one coordinate is $$1$$. For label smoothing or soft targets, assume $$y$$ is a normalized target distribution:
 
 $$
 \sum_{j=1}^{K} y_j = 1.
@@ -438,7 +438,7 @@ $$
 \frac{\partial L}{\partial z_i} = p_i.
 $$
 
-So a minimal implementation for a plain batch mean loss is:
+In code, the plain batch-mean version looks like this:
 
 ```python
 probs = torch.softmax(logits, dim=-1)
@@ -448,7 +448,7 @@ dlogits[torch.arange(B, device=logits.device), targets] -= 1
 dlogits /= B
 ```
 
-The final object `dlogits` is not a probability distribution. It is the gradient $$\partial L/\partial Z$$. For a batch mean reduction with no class weights and no ignored labels,
+The final `dlogits` tensor is not a probability distribution. It is the gradient $$\partial L/\partial Z$$. For a batch mean reduction with no class weights and no ignored labels,
 
 $$
 \boxed{
@@ -460,7 +460,7 @@ $$
 
 ## The Same Result Through the Softmax Jacobian
 
-The direct logsumexp derivation is the cleanest. But it is useful to see how the full softmax Jacobian disappears when chained with cross-entropy.
+The logsumexp derivation is the shortest route. It is still useful to check the same result by chaining cross-entropy through the softmax Jacobian.
 
 Starting from
 
@@ -510,11 +510,11 @@ p \odot \left(-\frac{y}{p} + 1\right) \\
 \end{aligned}
 $$
 
-This is the key cancellation. The dense softmax Jacobian is still mathematically present, but the $$1/p_i$$ term from differentiating the log cancels it into the simple logits gradient.
+This is the cancellation people usually have in mind. The dense softmax Jacobian is still there mathematically, but the $$1/p_i$$ term from differentiating the log collapses it into a simple logits gradient.
 
 ## LogSoftmax Backward
 
-Most real implementations avoid computing softmax probabilities and then taking a log separately. They use logsoftmax or a fused cross-entropy kernel, because logsumexp can be computed stably by subtracting the row maximum before exponentiating.
+In practice, frameworks usually avoid computing softmax probabilities and then taking a log. They use logsoftmax or a fused cross-entropy kernel, because logsumexp can be computed stably by subtracting the row maximum before exponentiating.
 
 Define
 
@@ -573,7 +573,7 @@ G_Z = G_A - P \odot \operatorname{rowsum}(G_A)
 }
 $$
 
-where `rowsum` has shape $$B \times 1$$ and broadcasts across the final axis.
+Here `rowsum` has shape $$B \times 1$$ and broadcasts across the final axis.
 
 In code:
 
@@ -601,13 +601,13 @@ $$
 \mathbf{1}^\top g_a = -\sum_j y_j = -1,
 $$
 
-the logsoftmax backward pass gives
+substituting into the logsoftmax backward pass gives
 
 $$
 g_z = -y - p(-1) = p-y.
 $$
 
-So all three views agree:
+At that point, all three routes agree:
 
 $$
 \boxed{
@@ -655,7 +655,7 @@ $$
 z \leftarrow z - \eta \nabla_z L,
 $$
 
-subtracting a negative value increases the target logit. The non-target gradients are positive, so their logits decrease. This is exactly the behavior we want.
+subtracting a negative value increases the target logit. The non-target gradients are positive, so their logits decrease. That matches the training signal we expected.
 
 ## What to Remember
 
@@ -675,9 +675,9 @@ G_Z = P - Y
 }
 $$
 
-with the appropriate scaling from the loss reduction.
+with whatever scaling the loss reduction adds.
 
-The useful mental model is: softmax couples the classes through a shared denominator, but cross-entropy contributes exactly the reciprocal probability term needed to collapse that coupling. That is why training code can use a simple logits gradient even though softmax itself has a dense Jacobian.
+The mental model I use is this: softmax couples the classes through a shared denominator, and cross-entropy contributes the reciprocal probability term that removes that coupling in the logits gradient. That is why the training code can use a simple $$P-Y$$ update even though softmax itself has a dense Jacobian.
 
 ---
 
