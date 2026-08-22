@@ -3,6 +3,7 @@ layout: about
 title: About
 permalink: /
 subtitle:
+thumbnail: /assets/img/profile_pictures/shreyansh_sf2.jpg
 
 profile:
   align: right
