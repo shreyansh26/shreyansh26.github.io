@@ -5,16 +5,20 @@ repo_description_lines_max: 2
 
 github_repos:
   - shreyansh26/Annotated-ML-Papers
-  - shreyansh26/MLSys-Experiments
   - shreyansh26/FlashAttention-PyTorch
+  - shreyansh26/Speculative-Decoding
+  - shreyansh26/optimizing-qwen3-asr-inference
+  - shreyansh26/qwen-spec-decode-benchmarking
+  - shreyansh26/MLSys-Experiments
+  - shreyansh26/multilora-llm-inference
+  - shreyansh26/pytorch-distributed-training-from-scratch
+  - shreyansh26/scan.cu
+  - shreyansh26/STILL-Towards-Infinite-Context-Windows
+  - shreyansh26/cartridges
+  - shreyansh26/wordle-solver
   - shreyansh26/FlashAttention-Triton
-  - shreyansh26/Speculative-Sampling
-  - shreyansh26/LLM-Sampling
-  - shreyansh26/Accelerating-Cross-Encoder-Inference
-  - shreyansh26/SparseMatrix-Computation-CUDA
   - shreyansh26/Attention-Mask-Patterns
+  - shreyansh26/LLM-Sampling
+  - shreyansh26/Speculative-Sampling
+  - shreyansh26/SparseMatrix-Computation-CUDA
   - shreyansh26/Extracting-Training-Data-from-Large-Langauge-Models
-  - shreyansh26/ML-Paper-Implementations
-  - shreyansh26/LLM-Activation-Steering-Experiments
-  - shreyansh26/DeepLearning-in-the-Browser
-  - shreyansh26/Linux-Malware-Detection-Research
